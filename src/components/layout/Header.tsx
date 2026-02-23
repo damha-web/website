@@ -35,16 +35,18 @@ export default function Header() {
         <>
             <header
                 className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 border-b border-transparent ${isScrolled || isMobileMenuOpen
-                        ? "bg-white/80 backdrop-blur-md shadow-sm border-gray-100"
-                        : "bg-transparent"
+                    ? "bg-white/80 backdrop-blur-md shadow-sm border-gray-100"
+                    : "bg-transparent"
                     }`}
             >
                 <div className="container mx-auto px-6 h-20 flex items-center justify-between">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 z-50">
-                        <span className="text-2xl font-bold font-montserrat tracking-tight text-secondary">
-                            DAMHA
-                        </span>
+                        <img
+                            src={isScrolled || isMobileMenuOpen ? "/assets/images/logo.svg" : "/assets/images/logo_allWhite.svg"}
+                            alt="DAMHA"
+                            className="h-6 md:h-7 w-auto transition-all duration-300"
+                        />
                     </Link>
 
                     {/* Desktop Nav */}
@@ -53,7 +55,11 @@ export default function Header() {
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`text-sm font-medium transition-colors hover:text-primary ${pathname === link.href ? "text-primary" : "text-text-main"
+                                className={`text-sm font-medium transition-colors hover:text-primary ${pathname === link.href
+                                        ? "text-primary"
+                                        : isScrolled || isMobileMenuOpen
+                                            ? "text-text-main"
+                                            : "text-white"
                                     }`}
                             >
                                 {link.label}
