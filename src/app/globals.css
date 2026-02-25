@@ -3,9 +3,9 @@
 
 
 @theme inline {
-  --color-primary: #E47B41;
+  --color-primary: #D60000;
   --color-secondary: #1F1F1F;
-  --color-accent: #EB6C4B;
+  --color-accent: #E47B41;
   --color-surface-light: #FAFDFF;
   --color-surface-alt: #F2FAFF;
   --color-text-main: #222222;
@@ -14,9 +14,10 @@
   --color-background: var(--color-surface-light);
   --color-foreground: var(--color-text-main);
 
-  --font-pretendard: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  --font-pretendard: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   --font-sans: var(--font-pretendard);
   --font-montserrat: var(--font-montserrat);
+  --font-heading: var(--font-montserrat);
 }
 
 :root {
@@ -24,16 +25,19 @@
   --foreground: var(--color-text-main);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: var(--color-secondary);
-    --foreground: var(--color-surface-light);
-  }
-}
-
 body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-pretendard);
   -webkit-font-smoothing: antialiased;
+}
+
+@keyframes subtleZoom {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.1);
+  }
 }

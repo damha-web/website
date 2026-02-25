@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${montserrat.variable} flex flex-col min-h-screen pt-20`}>
+      <body className={`${montserrat.variable} font-sans flex flex-col min-h-screen bg-background text-foreground antialiased`}>
         <Header />
         <main className="flex-1">
           {children}

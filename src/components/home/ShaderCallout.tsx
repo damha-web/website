@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { Plus } from "lucide-react";
+import { customFadeInUp } from "@/lib/animation-variants";
 
 const TypewriterCallout = ({ text1, text2 }: { text1: string, text2: string }) => {
     const [displayedText2, setDisplayedText2] = useState('');
@@ -14,7 +15,7 @@ const TypewriterCallout = ({ text1, text2 }: { text1: string, text2: string }) =
             if (displayedText2.length < text2.length) {
                 timeout = setTimeout(() => setDisplayedText2(text2.slice(0, displayedText2.length + 1)), 100);
             } else {
-                setPhase('wait');
+                timeout = setTimeout(() => setPhase('wait'), 0);
             }
         } else if (phase === 'wait') {
             timeout = setTimeout(() => setPhase('deleting'), 4000); // 4초 대기
@@ -22,7 +23,7 @@ const TypewriterCallout = ({ text1, text2 }: { text1: string, text2: string }) =
             if (displayedText2.length > 0) {
                 timeout = setTimeout(() => setDisplayedText2(text2.slice(0, displayedText2.length - 1)), 40);
             } else {
-                setPhase('pause');
+                timeout = setTimeout(() => setPhase('pause'), 0);
             }
         } else if (phase === 'pause') {
             timeout = setTimeout(() => setPhase('typing'), 500);
@@ -70,9 +71,9 @@ export default function ShaderCallout() {
 
             {/* 콘텐츠 */}
             <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
+                variants={customFadeInUp(0.8)}
                 className="container mx-auto px-6 text-center relative z-10"
             >
                 <div className="relative mx-auto max-w-4xl border border-gray-200/60 bg-white/60 backdrop-blur-sm py-16 px-8 md:px-12 [mask-image:radial-gradient(800rem_96rem_at_center,white,transparent)]">

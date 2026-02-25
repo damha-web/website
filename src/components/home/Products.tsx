@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { Sparkles, TrendingUp, Briefcase, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
@@ -39,23 +39,29 @@ const containerVariants = {
     },
 };
 
-const cardVariants = {
-    hidden: { opacity: 0, y: 40 },
+const cardVariants: Variants = {
+    hidden: {
+        opacity: 0,
+        y: 40,
+        clipPath: "inset(0% 0% 100% 0%)"
+    },
     show: {
         opacity: 1,
         y: 0,
+        clipPath: "inset(0% 0% 0% 0%)",
         transition: {
-            duration: 0.6,
-            ease: "easeOut",
+            duration: 0.8,
+            ease: [0.16, 1, 0.3, 1],
         },
     },
 };
 
 export default function Products() {
     return (
-        <section className="py-32 bg-surface-light relative">
-            <div className="container mx-auto px-6 relative z-10">
+        <section className="py-32 relative overflow-hidden bg-surface-light">
 
+
+            <div className="container mx-auto px-6 relative z-10">
                 {/* Section Header */}
                 <div className="text-center mb-20">
                     <motion.div
@@ -83,7 +89,7 @@ export default function Products() {
                     variants={containerVariants}
                     initial="hidden"
                     whileInView="show"
-                    viewport={{ once: true, margin: "-50px" }}
+                    viewport={{ once: false, margin: "-50px" }}
                 >
                     {SERVICES.map((service) => (
                         <motion.div

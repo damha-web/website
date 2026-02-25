@@ -1,53 +1,60 @@
-# 📋 Damha Website Renewal Implementation Plan
+# 담하(Damha) 웹사이트 리뉴얼 작업 계획서 (Implementation Plan)
 
-본 문서는 `PROJECT_BRIEF.md`를 바탕으로 한 담하 웹사이트 리뉴얼의 단계별 개발 로드맵입니다.
+`thinkcreative.co.kr` 벤치마킹 데이터와 `DESIGN.md` 가이드를 기반으로 프로젝트를 진행하기 위한 단계별 작업 리스트입니다.
+
+---
+
+## 🚀 1단계: 기반 아키텍처 및 디자인 시스템 세팅 (우선순위: ⭐⭐⭐⭐⭐)
+
+**목표:** Next.js 기반의 뼈대와 반복적으로 사용될 타이포그래피, 브랜드 에셋을 전역으로 설정합니다.
+
+- [ ] **Next.js (App Router) 초기화 및 Tailwind CSS 설정**
+  - **확인할 것:** 최신 버전(Next.js 14/15) 정상 작동 여부, `globals.css` 초기화, Dark Mode(`next-themes`) 등 기본 유틸리티 적용 여부.
+- [ ] **이원화 타이포그래피(Dual Font System) 구축**
+  - **작업 내용:** 본문용 국문 폰트(`Pretendard`)와 헤딩/포인트 영문 폰트(`Montserrat` 등)를 `tailwind.config.ts` 및 `layout.tsx`에 분리 세팅.
+  - **확인할 것:** 영어(H1~H4)와 한글(p, span)이 섞인 텍스트 영역에서 폰트 패밀리가 의도된 대로 구별되어 렌더링되는지 확인.
+- [ ] **브랜드 컬러 토큰 및 에셋 등록**
+  - **작업 내용:** `DESIGN.md`에 명시된 로고 및 인증 마크(`/assets/images/`)를 `public` 디렉토리에 확보하고, 브랜드 컬러 팔레트를 Tailwind CSS 설정에 확장(`extend`).
+  - **확인할 것:** 다크 배경 대비 시 로고와 인증마크의 가시성(Contrast) 확보 문제없는지 점검.
 
 ---
 
-## 🚀 Phase 1: Main Page & Hero Experience (UI/UX 완성)
+## 🎨 2단계: 핵심 UX 컴포넌트 개발 (우선순위: ⭐⭐⭐⭐)
 
-**목표:** 사이트 접속 시 가장 먼저 마주하는 홈 화면을 프리미엄급으로 구현.
+**목표:** 사용자 경험과 직결되는 네비게이션과 랜딩 페이지 첫인상을 구성합니다.
 
-- [x] **Hero Section 고도화:** `Framer Motion`을 활용하여 텍스트 및 배경 요소에 세련된 등장 애니메이션 적용.
-- [x] **Products Section:** 브랜딩/마케팅/컨설팅 3대 서비스를 시각화한 카드 및 인터랙션 구현.
-- [x] **Portfolio Preview:** 가로 스크롤 또는 Swiper.js를 활용한 최신 작업물 노출 영역 제작.
-- [x] **Strength/Trust Section:** 10년 경력을 강조하는 지표(숫자 카운팅 애니메이션 등) 및 신뢰감 있는 섹션 배치.
-- [x] **Floating Action Button (FAB):** 카카오톡/전화상담으로 연결되는 고정 버튼 구현.
-
-## 📁 Phase 2: Dynamic Portfolio System (핵심 기능)
-
-**목표:** 에이전시의 자산인 포트폴리오를 효과적으로 탐색하고 상세 정보를 제공.
-
-- [ ] **Portfolio Index (`/portfolio`):**
-  - 카테고리 필터링 기능 (Website, Marketing, Design 등).
-  - 썸네일 호버 시 상세 정보가 나타나는 세련된 그리드 레이아웃.
-- [ ] **Case Study Template (`/portfolio/[slug]`):**
-  - 단순 이미지 나열이 아닌 'Client Info → 목표 → 과정 → 결과' 구조의 스토리텔링 컴포넌트화.
-  - 프로젝트별 이미지 갤러리/슬라이더 구현.
-
-## 🏢 Phase 3: Brand Identity & Services (신뢰 구축)
-
-**목표:** 담하의 전문성과 프로세스를 심도 있게 설명.
-
-- [ ] **About Page (`/about`):** 연혁, 팀 소개, 비전 등을 담은 정적인 페이지 구현.
-- [ ] **Services Page (`/services`):** 서비스별 상세 프로세스(Step 1, 2, 3...) 및 정적 사이트 최적화(SSG)를 위한 컨텐츠 구성.
-
-## 🛠️ Phase 4: Optimization & Interaction Detail (폴리싱)
-
-**목표:** 웹사이트의 완성도를 결정짓는 디테일 작업.
-
-- [ ] **SEO 최적화:** 각 페이지별 메타 태그, JSON-LD 스키마 데이터 적용.
-- [ ] **반응형 디테일:** 모든 섹션에 대해 태블릿/모바일 가독성 재점검.
-- [ ] **Micro-animations:** 스크롤 시 요소들이 자연스럽게 나타나는 `scroll-reveal` 효과 전역 적용.
-- [ ] **Performance:** 이미지 최적화 (`next/image`) 및 WebP 변환 점검.
-
-## 🚢 Phase 5: Final QA & Deployment
-
-**목표:** 최종 검수 및 안정적인 런칭.
-
-- [ ] **Vercel Deployment:** 배포 환경 설정 및 환경 변수 점검.
-- [ ] **Cross-browser Testing:** Chrome, Safari, 모바일 브라우저 호환성 검사.
-- [ ] **Final Bug Fix:** 사용자 피드백 반영 및 최종 수정.
+- [ ] **상단 고정 네비게이션 바 (Sticky Header)**
+  - **작업 내용:** 스크롤 시 화면 상단에 부착되며 글래스모피즘(투명 블러) 효과 또는 다크 배경이 나타나는 헤더 컴포넌트 개발. 오른쪽 끝에 "카카오톡 챗봇 문의" 버튼 배치.
+  - **확인할 것:** 모바일 환경에서의 햄버거 메뉴 및 반응형 대응(`display: none` 등), `z-index` 충돌 여부 측정. 외부 링크 동작 유무.
+- [ ] **메인 히어로 섹션 다이내믹 배너 (Swiper Hero)**
+  - **작업 내용:** `Swiper.js` 혹은 `Framer Motion`을 활용해 브랜드를 상징하는 슬라이드 영상/이미지와 대형 영문 타이포그래피(슬로건)가 교차하는 첫 화면 구축.
+  - **확인할 것:** 초기 렌더링 시 **FOUC(비정상적 글꼴 로드 현상)** 이 없는지 점검. 모바일 대비 슬라이더 터치/스와이프 동작 정상 여부. 가로폭 비율이 꺠지지 않고 인증 마크(세로 112px 유지)가 올바르게 노출되는지 확인.
 
 ---
-**💡 다음 작업 추천:** 가장 가독성이 높고 효과가 큰 **Phase 1: Hero Section 고도화 및 Home 화면 섹션 구현**부터 시작하는 것을 추천드립니다.
+
+## 🏢 3단계: B2B 특화 상세 페이지 레이아웃 (우선순위: ⭐⭐⭐)
+
+**목표:** 포트폴리오(실적) 및 케이스 스터디 소개에 최적화된 분할 레이아웃 페이지 템플릿 제작.
+
+- [ ] **분할 구조 케이스 스터디 상세 뷰 프레임 개발**
+  - **작업 내용:** 브라우저 양분화 레이아웃 적용.
+    - **[좌측/상단 고정부]**: 요약 스펙(`Client`, `Tags`, `Date`, `Category`)을 모아보는 사이드바.
+    - **[우측 스크롤부]**: 자세한 스토리텔링과 프로젝트 결과를 설명하는 풍성한 영역.
+  - **확인할 것:** 긴 텍스트와 큰 이미지가 우측에 노출될 때, 좌측 스펙 사이드바가 `position: sticky;` 속성으로 스크롤이 자연스럽게 따라오는지(데스크탑 기준) 확인. 모바일(Tablet 이하)에서는 단일 컬럼 배열(상단 스펙, 하단 본문)로 우아하게 스태킹(Stacking) 전환되는지 필수 검증.
+
+---
+
+## 📈 4단계: SEO 최적화 및 배포 준비 (우선순위: ⭐⭐⭐)
+
+**목표:** B2B 사이트의 생명인 유기적 유입(Organic Search)을 위한 아키텍처 완성.
+
+- [ ] **다중 분할 사이트맵 생성 시스템 (Granular Sitemaps)**
+  - **작업 내용:** 단일 `sitemap.xml`이 아니라, Next.js의 동적 라우트를 이용해 `portfolio-sitemap.xml`, `category-sitemap.xml`, `page-sitemap.xml` 등으로 분기. 최상위 `sitemap_index.xml` 연동 구성.
+  - **확인할 것:** 실제로 XML 형태가 웹표준 규격으로 출력되는지 확인. 각 포트폴리오/포스트 URL이 유효한지 렌더링 시 검증.
+- [ ] **SEO 메타 태그 통일 (OpenGraph, Title, Description)**
+  - **작업 내용:** `layout.tsx`와 각 `page.tsx`에 `metadata` 객체를 설정하고 통일된 사이트명(`주식회사 담하 | DAMHA Co., Ltd.`) 및 대표 이미지 세팅.
+  - **확인할 것:** 소스 보기(View Source)나 SEO Meta 도구 이용해 크롬, 사파리, 카카오톡 등에 링크 공유 시 최적의 형태로 보이는가?
+
+---
+
+> 파일명: `IMPLEMENTATION_PLAN.md`에 저장됨. 각 작업은 **SequentialThinking 및 bkit 도구**를 활용하여 [Plan -> Do -> Check] 프로세스로 코딩됩니다.

@@ -33,6 +33,7 @@ export function CanvasTrailEffect() {
     const amplitudeRef = useRef(85);
     const frequencyRef = useRef(0.0015);
     const initializedRef = useRef(false);
+    const pulseRef = useRef(0);
 
     // 브랜드 로고 추출 색상 (RGB)
     // #C94B43 (레드오렌지), #D36554 (밝은오렌지), #DFAC3A (옐로우), #444489 (퍼플블루)
@@ -57,7 +58,9 @@ export function CanvasTrailEffect() {
         const g = Math.round(c1.g + (c2.g - c1.g) * progress);
         const b = Math.round(c1.b + (c2.b - c1.b) * progress);
 
-        return `rgba(${r}, ${g}, ${b}, 0.025)`;
+        // pulseRef.current에 따라 투명도 증가 (0.025 ~ 0.1)
+        const alpha = 0.025 + pulseRef.current * 0.075;
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     }, []);
 
     const createNode = useCallback((): NodePoint => ({
@@ -134,7 +137,8 @@ export function CanvasTrailEffect() {
 
         // 커스텀 브랜드 컬러 적용
         ctx.strokeStyle = getInterpolatedColor();
-        ctx.lineWidth = 10;
+        // pulseRef.current에 따라 선 두께 증가 (10 ~ 25)
+        ctx.lineWidth = 10 + pulseRef.current * 15;
 
         for (let i = 0; i < E.trails; i++) {
             const line = linesRef.current[i];
@@ -142,6 +146,12 @@ export function CanvasTrailEffect() {
                 updateLine(line);
                 drawLine(ctx, line);
             }
+        }
+
+        // Pulse decay
+        if (pulseRef.current > 0) {
+            pulseRef.current -= 0.02;
+            if (pulseRef.current < 0) pulseRef.current = 0;
         }
 
         frameRef.current++;
@@ -188,6 +198,10 @@ export function CanvasTrailEffect() {
             }
         };
 
+        const handleClick = () => {
+            pulseRef.current = 1.0;
+        };
+
         const handleFirstInteraction = (e: MouseEvent | TouchEvent) => {
             document.removeEventListener("mousemove", handleFirstInteraction);
             document.removeEventListener("touchstart", handleFirstInteraction);
@@ -199,6 +213,8 @@ export function CanvasTrailEffect() {
                     posRef.current.y = ev.touches[0].pageY;
                 }
             });
+            window.addEventListener("mousedown", handleClick);
+            window.addEventListener("touchstart", handleClick);
             handleMove(e);
             initLines();
             render();
@@ -221,6 +237,8 @@ export function CanvasTrailEffect() {
             document.removeEventListener("mousemove", handleFirstInteraction);
             document.removeEventListener("mousemove", handleMove);
             document.removeEventListener("touchstart", handleFirstInteraction);
+            window.removeEventListener("mousedown", handleClick);
+            window.removeEventListener("touchstart", handleClick);
             window.removeEventListener("resize", resizeCanvas);
         };
     }, [initLines, render, resizeCanvas]);

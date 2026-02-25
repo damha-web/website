@@ -1,0 +1,24 @@
+# Node modules and build outputs
+node_modules/
+.next/
+out/
+build/
+dist/
+
+# Assets (Images and PDFs are heavy on tokens)
+public/assets/
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.svg
+*.ico
+
+# Configs and logs
+.env*
+*.log
+package-lock.json
+.claude/
+
+# Ignore memory snapshots to keep context lean
+docs/.pdca-snapshots/
