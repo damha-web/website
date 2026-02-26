@@ -70,15 +70,16 @@ export default function ServiceCards() {
                                     <h3 className="text-white font-semibold md:font-bold text-[15px] sm:text-lg md:text-2xl group-hover:text-[#D60000] transition-colors duration-300 leading-tight">
                                         {card.title}
                                     </h3>
-                                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#D60000] transition-colors duration-300">
-                                        <Icon className="w-4 h-4 md:w-5 md:h-5 text-white/90 md:text-white" />
+                                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 overflow-hidden relative">
+                                        <Icon className="absolute w-4 h-4 md:w-5 md:h-5 text-white/90 md:text-white transition-transform duration-500 ease-out group-hover:-translate-y-10" />
+                                        <Icon className="absolute w-4 h-4 md:w-5 md:h-5 text-[#D60000] transition-transform duration-500 ease-out translate-y-10 group-hover:translate-y-0" />
                                     </div>
                                 </div>
                                 <div className="space-y-3 mt-auto hidden md:block">
                                     {links.map((line, idx) => (
                                         <div key={idx} className="flex justify-between items-center text-white/60 group-hover:text-white/90 transition-colors">
                                             <span className="text-sm md:text-base font-light">{line}</span>
-                                            <span className="text-white/20 group-hover:text-[#D60000] transition-colors text-lg inline-block transform group-hover:translate-x-1 duration-300 w-4 font-light">→</span>
+                                            <span className="text-white/30 group-hover:text-white/50 transition-colors text-sm inline-block w-4 text-right font-light">·</span>
                                         </div>
                                     ))}
                                 </div>

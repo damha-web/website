@@ -75,7 +75,7 @@ export default function PhilosophySection() {
                             className="w-full relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl"
                         >
                             <img
-                                src="/assets/images/damha_parallax_2.png"
+                                src="/assets/images/code.jpg"
                                 alt="Damha Philosophy"
                                 className="w-full h-full object-cover"
                             />

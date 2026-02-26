@@ -2,12 +2,12 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { TextReveal } from "@/components/ui/text-reveal";
 import { MagneticWrapper } from "@/components/ui/magnetic-wrapper";
+import { Globe } from "@/components/ui/globe";
 import {
     Sparkles, TrendingUp, Briefcase, ArrowRight, Palette,
     Search, BarChart, Users, FileText, MessageSquare,
-    ShieldCheck, HeartPulse, LifeBuoy, MonitorPlay, CheckCircle2, ChevronRight, Activity, Zap, Bus, Printer, MapPin, Navigation
+    ShieldCheck, HeartPulse, LifeBuoy, MonitorPlay, CheckCircle2, Activity, Zap, Bus, Printer, MapPin, Navigation
 } from "lucide-react";
 
 // The expanded services content
@@ -224,30 +224,84 @@ export default function ServicesPage() {
     return (
         <main className="min-h-screen bg-white">
             {/* Hero Section */}
-            <section className="pt-32 pb-24 bg-gradient-to-b from-gray-50 to-white overflow-hidden relative">
-                {/* Background Decorations */}
-                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#D60000]/5 rounded-full blur-[100px] pointer-events-none" />
-                <div className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] bg-[#D60000]/5 rounded-full blur-[100px] pointer-events-none" />
+            <section className="relative overflow-hidden bg-white py-24 lg:py-36">
+                <div className="container mx-auto px-6 relative z-10 max-w-7xl">
+                    <div className="flex flex-col lg:flex-row items-center justify-between gap-16">
+                        {/* Text Content */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8 }}
+                            className="w-full lg:w-[55%] z-20"
+                        >
+                            {/* English Subtitle for elegance */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 15 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8 }}
+                                className="flex items-center gap-4 mb-4"
+                            >
+                                <span className="w-12 h-[1px] bg-[#D60000]/50" />
+                                <span className="text-[#D60000] font-bold tracking-widest text-sm uppercase">
+                                    We Architect Brands
+                                </span>
+                            </motion.div>
 
-                <div className="container mx-auto px-6 max-w-5xl relative z-10 text-center">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
-                    >
-                        <span className="inline-block text-[#D60000] font-bold tracking-widest text-sm font-montserrat uppercase mb-6 bg-[#D60000]/5 px-5 py-2 rounded-full border border-[#D60000]/10">
-                            Our Core Solutions
-                        </span>
-                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-[#1F1F1F] mb-8 leading-tight">
-                            <TextReveal text="병원의 성공을 위한" />
-                            <br />
-                            <TextReveal text="토탈 퍼포먼스 로드맵" delay={0.3} />
-                        </h1>
-                        <p className="text-xl md:text-2xl text-gray-500 max-w-3xl mx-auto leading-relaxed break-keep font-light">
-                            개원의 첫걸음부터 안정적인 병원 경영, 그리고 위기 대응까지.<br />
-                            담하만의 심도 깊은 현장형 솔루션으로 압도적 차이를 만듭니다.
-                        </p>
-                    </motion.div>
+                            <motion.h1
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.1 }}
+                                className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-gray-900 leading-[1.1] tracking-tight mb-8"
+                            >
+                                우리는 <span className="text-[#E47B41]">브랜드</span>를<br />
+                                기획합니다.
+                            </motion.h1>
+
+                            <div className="text-[1.05rem] lg:text-[1.1rem] text-[#666666] leading-[2.0] font-medium break-keep space-y-6 mb-14">
+                                <p>
+                                    우리들의 생각을 자신이 가진 가장 큰 능력으로 확신하며<br className="hidden md:block" />
+                                    그 확신으로 브랜드를 만들어 갑니다.
+                                </p>
+                                <p>
+                                    고객이 만들어 낸 상품을 가장 필요로 하는 사람에게<br className="hidden md:block" />
+                                    가장 정확한 전달 방법을 설계합니다.
+                                </p>
+                                <p>
+                                    그리고 그 설계를 가치로 담아 경영방향을 설정하고<br className="hidden md:block" />
+                                    운영, 실행, 평가 등을 통해 가치를 알리는데 집중합니다.
+                                </p>
+                            </div>
+
+                            <div className="inline-flex items-center gap-4">
+                                <span className="w-8 h-[2px] bg-[#E47B41] rounded-full"></span>
+                                <p className="text-[1.15rem] lg:text-[1.25rem] font-bold text-[#111111]">
+                                    우리는 이것을 <span className="text-[#E47B41]">브랜드 기획</span>이라 합니다.
+                                </p>
+                            </div>
+                        </motion.div>
+
+                        {/* Right Globe Feature */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 40 }}
+                            animate={{ opacity: 1, x: 0, y: 0 }}
+                            transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                            className="w-full lg:w-[45%] flex justify-center lg:justify-end relative"
+                        >
+                            <div className="relative w-full max-w-[500px] aspect-square flex items-center justify-center">
+                                {/* Subtle background glow instead of hard shape */}
+                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(228,123,65,0.03)_0%,transparent_70%)] pointer-events-none" />
+
+                                <Globe
+                                    className="w-full h-full opacity-95 hover:opacity-100 transition-opacity duration-700"
+                                    autoRotateSpeed={0.0015}
+                                />
+
+                                {/* Refined floating particles */}
+                                <div className="absolute top-[20%] right-[10%] w-2 h-2 rounded-full bg-[#E47B41] animate-pulse opacity-80" />
+                                <div className="absolute bottom-[25%] left-[10%] w-1.5 h-1.5 rounded-full bg-[#E47B41] animate-ping opacity-60" style={{ animationDuration: '3s' }} />
+                            </div>
+                        </motion.div>
+                    </div>
                 </div>
             </section>
 

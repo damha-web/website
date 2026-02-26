@@ -33,8 +33,8 @@ export default function HeroBackground() {
         <div ref={containerRef} className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
             {/* User Attached Background Image - Hero Sunset */}
             <div
-                className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-screen"
-                style={{ backgroundImage: "url('/assets/images/hero_sunset.jpg')" }}
+                className="absolute inset-0 bg-cover bg-center opacity-60 mix-blend-screen"
+                style={{ backgroundImage: "url('/assets/images/hero_sunset02.jpg')" }}
             />
 
             {/* Main Color Glow (#D60000) */}

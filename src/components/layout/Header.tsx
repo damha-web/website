@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { MagneticWrapper } from "@/components/ui/magnetic-wrapper";
+
 
 const NAV_LINKS = [
     { label: "Home", href: "/" },
@@ -46,15 +46,15 @@ export default function Header() {
                     : "bg-transparent border-b border-transparent"
                     }`}
             >
-                <div className="container mx-auto px-6 h-20 flex items-center justify-between">
+                <div className="container mx-auto px-3 h-20 flex items-center justify-between">
                     {/* Logo */}
-                    <Link href="/" className="flex items-center gap-2 z-[110]">
+                    <a href="/" className="flex items-center gap-2 z-[110]">
                         <img
                             src="/assets/images/logo_allWhite.svg"
                             alt="DAMHA"
                             className={`h-6 md:h-7 w-auto transition-all duration-500 ${isSolid ? "brightness-0 invert-0" : "brightness-0 invert"}`}
                         />
-                    </Link>
+                    </a>
 
                     {/* Desktop Nav */}
                     <nav className="hidden md:flex items-center gap-10 font-heading">
@@ -70,16 +70,7 @@ export default function Header() {
                                 {link.label}
                             </Link>
                         ))}
-                        <MagneticWrapper>
-                            <a
-                                href="https://accounts.kakao.com/login/?continue=http%3A%2F%2Fpf.kakao.com%2F_Jxldks%2Fchat#login"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="bg-[#D60000] hover:bg-[#EB6C4B] text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 shadow-lg shadow-[#D60000]/20 hover:scale-105 active:scale-95"
-                            >
-                                카카오톡 문의
-                            </a>
-                        </MagneticWrapper>
+
                     </nav>
 
                     {/* Mobile Menu Toggle */}
@@ -114,16 +105,7 @@ export default function Header() {
                                     {link.label}
                                 </Link>
                             ))}
-                            <div className="mt-12">
-                                <a
-                                    href="https://accounts.kakao.com/login/?continue=http%3A%2F%2Fpf.kakao.com%2F_Jxldks%2Fchat#login"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="block w-full text-center bg-[#D60000] text-white py-5 rounded-2xl text-xl font-bold shadow-xl shadow-[#D60000]/20"
-                                >
-                                    카카오톡 문의
-                                </a>
-                            </div>
+
                         </nav>
 
                         <div className="mt-auto pb-16">

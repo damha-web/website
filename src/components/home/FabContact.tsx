@@ -1,6 +1,6 @@
 "use client";
 
-import { MessageCircle, Phone } from "lucide-react";
+import { MessageCircle, Phone, ArrowUp } from "lucide-react";
 import { MagneticWrapper } from "@/components/ui/magnetic-wrapper";
 
 export default function FabContact() {
@@ -28,6 +28,18 @@ export default function FabContact() {
                 >
                     <Phone size={24} fill="currentColor" strokeWidth={1} />
                 </a>
+            </MagneticWrapper>
+
+            {/* TOP Button */}
+            <MagneticWrapper strength={0.3}>
+                <button
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    className="w-14 h-14 bg-white/80 backdrop-blur-sm text-[#1F1F1F] rounded-full flex flex-col items-center justify-center shadow-lg hover:shadow-xl hover:bg-white transition-all duration-300 font-bold text-[10px]"
+                    aria-label="최상단으로 이동"
+                >
+                    <ArrowUp size={20} strokeWidth={2} className="mb-0.5" />
+                    <span>TOP</span>
+                </button>
             </MagneticWrapper>
         </div>
     );
