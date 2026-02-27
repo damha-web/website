@@ -48,6 +48,7 @@ export default function Header() {
             >
                 <div className="container mx-auto px-3 h-20 flex items-center justify-between">
                     {/* Logo */}
+                    {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
                     <a href="/" className="flex items-center gap-2 z-[110]">
                         <img
                             src="/assets/images/logo_allWhite.svg"
@@ -62,8 +63,8 @@ export default function Header() {
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`text-sm font-extrabold transition-all hover:text-[#D60000] tracking-wider uppercase ${pathname === link.href
-                                    ? "text-[#D60000]"
+                                className={`text-sm font-extrabold transition-all hover:text-[#E47B41] tracking-wider uppercase ${pathname === link.href
+                                    ? "text-[#E47B41]"
                                     : (isSolid ? "text-[#1F1F1F]" : "text-white")
                                     }`}
                             >
@@ -75,7 +76,7 @@ export default function Header() {
 
                     {/* Mobile Menu Toggle */}
                     <button
-                        className={`md:hidden z-[110] transition-colors ${isSolid ? "text-[#1F1F1F]" : "text-white"} hover:text-[#D60000]`}
+                        className={`md:hidden z-[110] transition-colors ${isSolid ? "text-[#1F1F1F]" : "text-white"} hover:text-[#E47B41]`}
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         aria-label="Toggle Menu"
                     >
@@ -99,7 +100,7 @@ export default function Header() {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className={`text-4xl font-black tracking-tighter transition-all hover:text-[#D60000] ${pathname === link.href ? "text-[#D60000]" : "text-white/40"
+                                    className={`text-4xl font-black tracking-tighter transition-all hover:text-[#E47B41] ${pathname === link.href ? "text-[#E47B41]" : "text-white/40"
                                         }`}
                                 >
                                     {link.label}

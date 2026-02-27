@@ -6,8 +6,7 @@
     "design_concept": "Glassmorphism, Grand Nature Theme, Magazine Editorial Layout",
     "key_colors": {
         "primary": "#FFFFFF",
-        "accent": "#E47B41",
-        "highlight_red": "#D60000"
+        "accent": "#E47B41"
     },
     "history": [
         {
@@ -27,17 +26,21 @@
                 "Updated DEFAULT_MARKERS mapped across global continents (Seoul, London, Paris, NYC, etc.).",
                 "Replaced default city labels with Branding/Marketing core values: Identity, Branding, Strategy, Experience, Performance, Creative, Value, Storytelling, Purpose, Foundation, Core, Philosophy, Vision, Innovation, Impact, Concept, Analysis.",
                 "Created an interconnected global web in DEFAULT_CONNECTIONS (23 arcs).",
-                "Added a dynamic highlighting feature tracking time: randomly illuminating a specific marker label and connection dot in #D60000 red, accompanied by a stronger pulsing ring."
+                "Added a dynamic highlighting feature tracking time: randomly illuminating a specific marker label and connection dot."
             ]
         },
         {
-            "date": "2026-02-25",
-            "task": "Hero Component Typography",
+            "date": "2026-02-27",
+            "task": "About Page Organization Structure Redesign",
             "details": [
-                "Added a stylish English subtitle above the main text: 'WE ARCHITECT BRANDS' alongside an accent line.",
-                "Updated subtitle and accent line to match the highlight red (#D60000) for cohesive branding with the globe animation."
+                "Global color scheme updated: Red (#D60000) replaced entirely by Sunset Orange (#E47B41) across components including Header.",
+                "Redesigned the entire 'Organisation' section in the About page to a modern, sophisticated tree structure with glassmorphism UI.",
+                "Added specific department capabilities & team structures (Marketing, Web, Brand Strategy) based on new PDF insights.",
+                "Added detailed core capabilities cards (Consulting, Content, UX/UI) with engaging hover glow-effects and animations.",
+                "Refined text to professional marketing copy (e.g., '각 분야별 최고 수준의 시니어급 전문가들이...').",
+                "Refined MOT Customer Journey Map with continuous loop representation and connector arrows."
             ]
         }
     ],
-    "upcoming_state": "Services page Hero section is visually locked and complete."
+    "upcoming_state": "About Page Structure is locked. Ready to proceed to next steps."
 }
