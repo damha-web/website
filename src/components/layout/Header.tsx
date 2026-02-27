@@ -63,8 +63,8 @@ export default function Header() {
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`text-sm font-extrabold transition-all hover:text-[#E47B41] tracking-wider uppercase ${pathname === link.href
-                                    ? "text-[#E47B41]"
+                                className={`text-sm font-extrabold transition-all hover:text-[#D60000] tracking-wider uppercase ${pathname === link.href
+                                    ? "text-[#D60000]"
                                     : (isSolid ? "text-[#1F1F1F]" : "text-white")
                                     }`}
                             >
@@ -76,7 +76,7 @@ export default function Header() {
 
                     {/* Mobile Menu Toggle */}
                     <button
-                        className={`md:hidden z-[110] transition-colors ${isSolid ? "text-[#1F1F1F]" : "text-white"} hover:text-[#E47B41]`}
+                        className={`md:hidden z-[110] transition-colors ${isSolid ? "text-[#1F1F1F]" : "text-white"} hover:text-[#D60000]`}
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         aria-label="Toggle Menu"
                     >
@@ -100,7 +100,7 @@ export default function Header() {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className={`text-4xl font-black tracking-tighter transition-all hover:text-[#E47B41] ${pathname === link.href ? "text-[#E47B41]" : "text-white/40"
+                                    className={`text-4xl font-black tracking-tighter transition-all hover:text-[#D60000] ${pathname === link.href ? "text-[#D60000]" : "text-white/40"
                                         }`}
                                 >
                                     {link.label}

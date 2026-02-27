@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { FileText, Megaphone, Building2, Users, LucideIcon } from "lucide-react";
+import { Layers, Target, Compass, Map, LucideIcon } from "lucide-react";
 import { fadeInUp, staggerContainer } from "@/lib/animation-variants";
 
 interface ServiceCard {
@@ -16,28 +16,28 @@ interface ServiceCard {
 const SERVICE_CARDS: ServiceCard[] = [
     {
         title: "브랜딩",
-        icon: FileText,
+        icon: Layers,
         description: "VI 아이덴티티\n홈페이지 제작\n사진·영상 제작",
         href: "/services#branding",
-        color: "from-[#E47B41] to-[#EB6C4B]",
+        color: "from-[#D60000] to-[#FF2222]",
     },
     {
         title: "마케팅",
-        icon: Megaphone,
+        icon: Target,
         description: "검색광고\n블로그·카페\nSNS·유튜브",
         href: "/services#marketing",
         color: "from-blue-500 to-blue-600",
     },
     {
         title: "컨설팅",
-        icon: Building2,
+        icon: Compass,
         description: "개원 컨설팅\n경영 전략\n내부 시스템",
         href: "/services#consulting",
         color: "from-purple-500 to-purple-600",
     },
     {
         title: "오프라인",
-        icon: Users,
+        icon: Map,
         description: "버스·택배 광고\n인쇄물 디자인\n배포 마케팅",
         href: "/services#offline",
         color: "from-green-500 to-green-600",

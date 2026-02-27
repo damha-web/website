@@ -5,16 +5,16 @@ import Link from "next/link";
 import { MagneticWrapper } from "@/components/ui/magnetic-wrapper";
 import { Globe } from "@/components/ui/globe";
 import {
-    Sparkles, TrendingUp, Briefcase, ArrowRight, Palette,
-    Search, BarChart, Users, FileText, MessageSquare,
-    ShieldCheck, HeartPulse, LifeBuoy, MonitorPlay, CheckCircle2, Activity, Zap, Bus, Printer, MapPin, Navigation
+    Layers, LineChart, Compass, ArrowRight, PenTool,
+    Search, Newspaper, Rocket, Scale, Video,
+    Lock, UserCheck, ShieldAlert, LayoutTemplate, CheckCircle2, GraduationCap, Bus, Printer, MapPin, Map, Camera, Gavel
 } from "lucide-react";
 
 // The expanded services content
 const SERVICES = [
     {
         id: "branding",
-        icon: <Sparkles className="w-14 h-14" />,
+        icon: <Layers className="w-14 h-14" />,
         title: "Branding",
         subtitle: "MOT 기반 브랜드 아이덴티티 구축",
         description: "환자가 병원을 처음 인지하는 순간부터 방문, 진료, 그리고 사후 관리까지. 모든 고객 여정(MOT)을 세밀하게 분석하여 흔들리지 않는 병원만의 본질적 가치를 설계합니다.",
@@ -22,17 +22,17 @@ const SERVICES = [
             {
                 title: "VI/CI 및 아이덴티티",
                 description: "원장님의 철학을 시각화하는 비주얼 시스템 구축 및 특허 기반 브랜딩 솔루션 도입.",
-                icon: <Palette className="w-6 h-6" />
+                icon: <PenTool className="w-6 h-6" />
             },
             {
                 title: "특허기반 1Page 모달 홈페이지",
                 description: "복잡한 뎁스를 없애고 이탈률을 최소화하는 고전환율 랜딩페이지 최적화.",
-                icon: <MonitorPlay className="w-6 h-6" />
+                icon: <LayoutTemplate className="w-6 h-6" />
             },
             {
                 title: "프리미엄 비주얼 에셋",
                 description: "원내 전문 촬영, 메디컬 3D 그래픽, 시네마틱 홍보 영상 등 하이엔드 콘텐츠 제작.",
-                icon: <Sparkles className="w-6 h-6" />
+                icon: <Camera className="w-6 h-6" />
             }
         ],
         specialFeature: {
@@ -53,7 +53,7 @@ const SERVICES = [
     },
     {
         id: "marketing",
-        icon: <TrendingUp className="w-14 h-14" />,
+        icon: <LineChart className="w-14 h-14" />,
         title: "Marketing",
         subtitle: "채널별 통합 퍼포먼스 마케팅",
         description: "단순한 조회수 늘리기가 아닙니다. 병원의 의료적 전문성을 강조하는 수준 높은 콘텐츠로 실제 내원과 예약 결제를 유도하는 퍼포먼스 마케팅을 전개합니다.",
@@ -66,12 +66,12 @@ const SERVICES = [
             {
                 title: "영상 및 SNS 미디어 확산",
                 description: "유튜브 숏폼, 당근마켓, 인스타그램 등 최신 트렌드를 반영한 타겟팅 미디어 운영.",
-                icon: <MessageSquare className="w-6 h-6" />
+                icon: <Video className="w-6 h-6" />
             },
             {
                 title: "언론 보도 및 퍼포먼스 광고",
                 description: "의학적 신뢰도를 높이는 언론 송출 및 데이터 기반 GDN, 메타 스폰서드 광고.",
-                icon: <BarChart className="w-6 h-6" />
+                icon: <Newspaper className="w-6 h-6" />
             }
         ],
         specialFeature: null,
@@ -88,7 +88,7 @@ const SERVICES = [
     },
     {
         id: "consulting",
-        icon: <Briefcase className="w-14 h-14" />,
+        icon: <Compass className="w-14 h-14" />,
         title: "Consulting",
         subtitle: "병원 경영 및 시스템 컨설팅",
         description: "병원 실무 출신의 베테랑들(간호사, 상담실장, 원무과장)이 직접 진료 프로토콜과 내부 시스템을 진단하여 새는 비용을 막고 수익 구조를 정상화합니다.",
@@ -96,17 +96,17 @@ const SERVICES = [
             {
                 title: "개원 토탈 인큐베이팅",
                 description: "입지 선정부터 상권 분석, 초기 인테리어 컨셉 및 직원 세팅 로드맵 제공.",
-                icon: <Users className="w-6 h-6" />
+                icon: <Rocket className="w-6 h-6" />
             },
             {
                 title: "손해사정 및 보험 컨설팅",
                 description: "복잡한 보험 분쟁, 실비 청구 이슈 등 원내에서 감당하기 힘든 행정적 대응.",
-                icon: <FileText className="w-6 h-6" />
+                icon: <Scale className="w-6 h-6" />
             },
             {
                 title: "고객 관리(CS) 및 조직 문화",
                 description: "맞춤형 직원 응대 매뉴얼 제작, 컴플레인 대처 프로토콜 교육 및 부정 리뷰 방어.",
-                icon: <HeartPulse className="w-6 h-6" />
+                icon: <UserCheck className="w-6 h-6" />
             }
         ],
         specialFeature: null,
@@ -123,7 +123,7 @@ const SERVICES = [
     },
     {
         id: "offline",
-        icon: <Navigation className="w-14 h-14" />,
+        icon: <Map className="w-14 h-14" />,
         title: "Offline",
         subtitle: "지역 타겟팅 오프라인 광고 및 디자인",
         description: "온라인 유입만으로는 부족한 지역 기반 비즈니스를 위해, 버스, 원내 게시물, 택배 등 오프라인 생활 반경을 촘촘하게 타겟팅하는 마케팅을 전개합니다.",
@@ -158,7 +158,7 @@ const SERVICES = [
     },
     {
         id: "safety",
-        icon: <ShieldCheck className="w-14 h-14" />,
+        icon: <Lock className="w-14 h-14" />,
         title: "Safety & Biz",
         subtitle: "의료기관 통합 안전 및 경영지원",
         description: "최근 강화되고 있는 의료기관 평가 인증과 중대재해처벌법 등 법적/제도적 리스크로부터 원장님과 병원을 안전하게 보호하는 전방위적 관리 솔루션입니다.",
@@ -166,17 +166,17 @@ const SERVICES = [
             {
                 title: "종합 안전 관리 시스템",
                 description: "근로자 안전 보건 관리, 시설물 재난위험 평가 및 소방/보안 점검 체계화.",
-                icon: <LifeBuoy className="w-6 h-6" />
+                icon: <ShieldAlert className="w-6 h-6" />
             },
             {
                 title: "노무 및 법무 리스크 헤지",
                 description: "직원 근로 계약, 노무 리스크 점검 및 진료 간 발생할 수 있는 의료 분쟁 초기 대응 가이드.",
-                icon: <Zap className="w-6 h-6" />
+                icon: <Gavel className="w-6 h-6" />
             },
             {
                 title: "법정 교육 및 인증 평가지원",
                 description: "의료기관 인증 평가를 대비한 모의 조사 실시 및 직원 필수 교육(성희롱, 개인정보 등) 대행.",
-                icon: <Activity className="w-6 h-6" />
+                icon: <GraduationCap className="w-6 h-6" />
             }
         ],
         specialFeature: {
@@ -253,7 +253,7 @@ export default function ServicesPage() {
                                 transition={{ duration: 0.8, delay: 0.1 }}
                                 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-gray-900 leading-[1.1] tracking-tight mb-8"
                             >
-                                우리는 <span className="text-[#E47B41]">브랜드</span>를<br />
+                                우리는 <span className="text-[#D60000]">브랜드</span>를<br />
                                 기획합니다.
                             </motion.h1>
 
@@ -273,9 +273,9 @@ export default function ServicesPage() {
                             </div>
 
                             <div className="inline-flex items-center gap-4">
-                                <span className="w-8 h-[2px] bg-[#E47B41] rounded-full"></span>
+                                <span className="w-8 h-[2px] bg-[#D60000] rounded-full"></span>
                                 <p className="text-[1.15rem] lg:text-[1.25rem] font-bold text-[#111111]">
-                                    우리는 이것을 <span className="text-[#E47B41]">브랜드 기획</span>이라 합니다.
+                                    우리는 이것을 <span className="text-[#D60000]">브랜드 기획</span>이라 합니다.
                                 </p>
                             </div>
                         </motion.div>
@@ -297,8 +297,8 @@ export default function ServicesPage() {
                                 />
 
                                 {/* Refined floating particles */}
-                                <div className="absolute top-[20%] right-[10%] w-2 h-2 rounded-full bg-[#E47B41] animate-pulse opacity-80" />
-                                <div className="absolute bottom-[25%] left-[10%] w-1.5 h-1.5 rounded-full bg-[#E47B41] animate-ping opacity-60" style={{ animationDuration: '3s' }} />
+                                <div className="absolute top-[20%] right-[10%] w-2 h-2 rounded-full bg-[#D60000] animate-pulse opacity-80" />
+                                <div className="absolute bottom-[25%] left-[10%] w-1.5 h-1.5 rounded-full bg-[#D60000] animate-ping opacity-60" style={{ animationDuration: '3s' }} />
                             </div>
                         </motion.div>
                     </div>
@@ -398,7 +398,7 @@ export default function ServicesPage() {
                                             {service.specialFeature && (
                                                 <div className="mt-8 pt-8 border-t border-white/10">
                                                     <div className="flex items-center gap-3 mb-4">
-                                                        <Sparkles className="w-5 h-5 text-[#D60000]" />
+                                                        <Layers className="w-5 h-5 text-[#D60000]" />
                                                         <h4 className="text-lg font-bold text-[#D60000]">{service.specialFeature.title}</h4>
                                                     </div>
                                                     <p className="text-gray-300 font-light text-sm leading-relaxed mb-4">
@@ -459,7 +459,7 @@ export default function ServicesPage() {
                                         <div className="w-12 h-12 bg-gradient-to-br from-[#D60000] to-[#D60000] rounded-2xl flex items-center justify-center">
                                             <span className="text-white font-black text-xl">{item.number}</span>
                                         </div>
-                                        <Zap className="w-6 h-6 text-white/20" />
+                                        <CheckCircle2 className="w-6 h-6 text-white/20" />
                                     </div>
                                     <h3 className="text-2xl font-bold mb-4 text-white">
                                         {item.title}

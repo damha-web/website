@@ -3,8 +3,8 @@
 ## 1. Project Standards
 - **Framework**: Next.js (App Router), TypeScript, Tailwind CSS
 - **Design System**: Glassmorphism, Grand Nature Theme
-- **Primary Color**: `#FFFFFF` (White)
-- **Accent Color**: `#E47B41` (Sunset Orange)
+- **Primary Color**: `#D60000` (Damha Red)
+- **Accent Color**: `#D60000` (Damha Red)
 - **Methodology**: bkit PDCA Cycle (Mandatory)
 
 ## 2. Context Engineering (Token Saving)

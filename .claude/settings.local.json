@@ -4,7 +4,9 @@
       "Bash(npm install react-intersection-observer react-countup)",
       "Bash(npm run dev)",
       "Bash(npm run build)",
-      "Bash(npm uninstall react-typed swiper)"
+      "Bash(npm uninstall react-typed swiper)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(curl -s http://localhost:3000/sitemap.xml)"
     ],
     "deny": [],
     "ask": []
