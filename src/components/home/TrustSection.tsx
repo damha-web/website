@@ -5,6 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 import { useInView } from "react-intersection-observer";
 import CountUp from "react-countup";
 import { SVGMasks } from "@/components/ui/svg-masks";
+import { STATS } from "@/data/stats";
 
 /**
  * TrustSection variants
@@ -100,7 +101,7 @@ export default function TrustSection() {
 
                         <div className="mt-auto relative z-10">
                             <span className="text-5xl font-bold font-montserrat text-secondary mb-3 block leading-none">
-                                {inView ? <CountUp end={131} duration={2} /> : "0"}
+                                {inView ? <CountUp end={STATS.hospitalClients} duration={2} /> : "0"}
                                 <span className="text-primary">+</span>
                             </span>
                             <p className="text-lg font-bold text-text-main mb-1">병원 레퍼런스</p>
@@ -133,7 +134,7 @@ export default function TrustSection() {
 
                         <div className="mt-auto relative z-10">
                             <span className="text-5xl font-bold font-montserrat text-secondary mb-3 block leading-none">
-                                {inView ? <CountUp end={48} duration={2} /> : "0"}
+                                {inView ? <CountUp end={STATS.regularEmployees} duration={2} /> : "0"}
                                 <span className="text-primary">+</span>
                             </span>
                             <p className="text-lg font-bold text-text-main mb-1">정규직 전문가 그룹</p>
@@ -177,7 +178,7 @@ export default function TrustSection() {
 
                         <div className="mt-auto relative z-10">
                             <span className="text-5xl font-bold font-montserrat text-secondary mb-3 block leading-none">
-                                {inView ? <CountUp end={10} duration={2.5} /> : "0"}
+                                {inView ? <CountUp end={STATS.fieldExperienceYears} duration={2.5} /> : "0"}
                                 <span className="text-primary">yr</span>
                             </span>
                             <p className="text-lg font-bold text-text-main mb-1">실무 필드 노하우</p>
@@ -229,7 +230,7 @@ export default function TrustSection() {
 
                         <div className="mt-auto relative z-10">
                             <span className="text-5xl font-bold font-montserrat text-secondary mb-3 block leading-none">
-                                {inView ? <CountUp end={95} duration={2} /> : "0"}
+                                {inView ? <CountUp end={STATS.clientRetentionRate} duration={2} /> : "0"}
                                 <span className="text-primary">%</span>
                             </span>
                             <p className="text-lg font-bold text-text-main mb-1">고객 재의뢰율</p>

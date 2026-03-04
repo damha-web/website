@@ -1,0 +1,15 @@
+export const COMPANY = {
+    name: "주식회사 담하",
+    nameEn: "DAMHA",
+    established: "2021. 07. 19",
+    address: "부산광역시 동래구 연안로59번길 7, 5층",
+    phone: "051-757-0719",
+    phoneDisplay: "051.757.0719",
+    mobile: "010-2983-4744",
+    mobileDisplay: "010.2983.4744",
+    email: "brand@damha.co.kr",
+    ceo: "정승우",
+    businessNumber: "247-81-03001",
+    employees: { regular: 48, contract: 12, total: 60 },
+    kakaoUrl: "https://accounts.kakao.com/login/?continue=http%3A%2F%2Fpf.kakao.com%2F_Jxldks%2Fchat#login",
+} as const;

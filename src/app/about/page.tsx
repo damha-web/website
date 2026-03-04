@@ -4,16 +4,19 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { TextReveal } from "@/components/ui/text-reveal";
 import { MagneticWrapper } from "@/components/ui/magnetic-wrapper";
-import { ArrowRight, Users, Target, BarChart3, Handshake, ClipboardList, CheckCircle2, ChevronRight, Eye, Search, CalendarCheck } from "lucide-react";
+import { ArrowRight, Users, Target, BarChart3, Handshake, ClipboardList, CheckCircle2, ChevronRight, Eye, Search, CalendarCheck, Award, ShieldCheck, FlaskConical, Building2, Hospital, Leaf, Heart, Smile, Stethoscope } from "lucide-react";
+import { COMPANY } from "@/data/company";
+import { getClientSummary, STATS } from "@/data/stats";
+import { CERTIFICATIONS, CLIENT_CATEGORIES } from "@/data/clients";
 
 const COMPANY_INFO = {
-    name: "주식회사 담하",
-    established: "2021. 07. 19",
-    address: "부산광역시 동래구 연안로 41, 5층 서정빌딩",
-    phone: "051-757-0719",
-    ceo: "정승우",
-    employees: "정규직 48명 / 비정규직 12명",
-    clients: "병원 131개 (종합병원 4, 일반병원 20, 한방 5, 요양 3, 치과 4, 의원 95+)"
+    name: COMPANY.name,
+    established: COMPANY.established,
+    address: COMPANY.address,
+    phone: COMPANY.phone,
+    ceo: COMPANY.ceo,
+    employees: `정규직 ${COMPANY.employees.regular}명 / 비정규직 ${COMPANY.employees.contract}명`,
+    clients: getClientSummary()
 };
 
 const ORG_AFFILIATES = [
@@ -434,6 +437,109 @@ export default function AboutPage() {
                 </div>
             </section>
 
+            {/* Certifications & Patents */}
+            <section className="py-24 bg-gray-50">
+                <div className="container mx-auto px-6 max-w-6xl">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-16"
+                    >
+                        <span className="inline-block px-4 py-1.5 bg-[#D60000]/10 text-[#D60000] rounded-full text-xs font-bold tracking-widest uppercase mb-4">
+                            Certifications
+                        </span>
+                        <h2 className="text-4xl md:text-5xl font-black text-[#1F1F1F] mb-4">
+                            공인된 <span className="text-[#D60000]">전문성</span>과 신뢰
+                        </h2>
+                        <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+                            특허 기술과 국제 인증으로 검증된 담하의 역량
+                        </p>
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {CERTIFICATIONS.map((cert, idx) => {
+                            const icons = [
+                                <Award key="award" className="w-8 h-8 text-[#D60000]" />,
+                                <ShieldCheck key="shield1" className="w-8 h-8 text-[#D60000]" />,
+                                <ShieldCheck key="shield2" className="w-8 h-8 text-[#D60000]" />,
+                                <FlaskConical key="flask" className="w-8 h-8 text-[#D60000]" />
+                            ];
+                            return (
+                                <motion.div
+                                    key={idx}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: idx * 0.1 }}
+                                    className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                                >
+                                    <div className="w-14 h-14 bg-[#D60000]/5 rounded-xl flex items-center justify-center mb-5">
+                                        {icons[idx]}
+                                    </div>
+                                    <h3 className="text-lg font-bold text-[#1F1F1F] mb-1">{cert.title}</h3>
+                                    <p className="text-sm font-semibold text-[#D60000] mb-3">{cert.number}</p>
+                                    <p className="text-sm text-gray-500 leading-relaxed">{cert.description}</p>
+                                </motion.div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </section>
+
+            {/* Client Portfolio by Category */}
+            <section className="py-24 bg-white">
+                <div className="container mx-auto px-6 max-w-6xl">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-16"
+                    >
+                        <span className="inline-block px-4 py-1.5 bg-[#D60000]/10 text-[#D60000] rounded-full text-xs font-bold tracking-widest uppercase mb-4">
+                            Client Portfolio
+                        </span>
+                        <h2 className="text-4xl md:text-5xl font-black text-[#1F1F1F] mb-4">
+                            <span className="text-[#D60000]">{STATS.hospitalClients}+</span> 의료기관 파트너
+                        </h2>
+                        <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+                            종합병원부터 의원까지, 다양한 규모의 의료기관이 담하를 선택했습니다
+                        </p>
+                    </motion.div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                        {CLIENT_CATEGORIES.map((client, idx) => {
+                            const icons = [
+                                <Building2 key="b2" className="w-7 h-7" />,
+                                <Hospital key="h" className="w-7 h-7" />,
+                                <Leaf key="l" className="w-7 h-7" />,
+                                <Heart key="ht" className="w-7 h-7" />,
+                                <Smile key="s" className="w-7 h-7" />,
+                                <Stethoscope key="st" className="w-7 h-7" />
+                            ];
+                            return (
+                                <motion.div
+                                    key={idx}
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    whileInView={{ opacity: 1, scale: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: idx * 0.08 }}
+                                    className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-[#D60000]/5 transition-colors duration-300 border border-gray-100"
+                                >
+                                    <div className="text-[#D60000]/60 flex justify-center mb-3">
+                                        {icons[idx]}
+                                    </div>
+                                    <div className="text-3xl font-black text-[#1F1F1F] mb-1">
+                                        {client.count}<span className="text-[#D60000] text-xl">{client.suffix || ""}</span>
+                                    </div>
+                                    <p className="text-sm font-medium text-gray-500">{client.category}</p>
+                                </motion.div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </section>
+
             {/* MOT Based Branding - Customer Journey Map */}
             <section className="py-32 bg-gradient-to-b from-white via-gray-50/50 to-white overflow-hidden relative">
                 {/* Background journey path decoration */}
@@ -663,7 +769,7 @@ export default function AboutPage() {
                             </MagneticWrapper>
                             <MagneticWrapper>
                                 <a
-                                    href="https://accounts.kakao.com/login/?continue=http%3A%2F%2Fpf.kakao.com%2F_Jxldks%2Fchat#login"
+                                    href={COMPANY.kakaoUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#1F1F1F] font-bold rounded-full hover:bg-gray-100 transition-colors text-lg"

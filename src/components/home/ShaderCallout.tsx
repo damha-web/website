@@ -2,8 +2,9 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { Plus } from "lucide-react";
+import { Plus, MessageCircle } from "lucide-react";
 import { customFadeInUp } from "@/lib/animation-variants";
+import { COMPANY } from "@/data/company";
 
 const TypewriterCallout = ({ text1, text2 }: { text1: string, text2: string }) => {
     const [displayedText2, setDisplayedText2] = useState('');
@@ -104,10 +105,13 @@ export default function ShaderCallout() {
                         수면 아래에서 끊임없이 움직이는 담하의 노력을 경험하세요.
                     </p>
                     <a
-                        href="/contact"
-                        className="inline-flex items-center px-8 py-4 rounded-xl bg-primary text-white text-lg font-medium transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-primary/30 hover:shadow-primary/50"
+                        href={COMPANY.kakaoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-primary text-white text-lg font-medium transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-primary/30 hover:shadow-primary/50"
                     >
-                        프로젝트 문의하기
+                        카카오톡 상담하기
+                        <MessageCircle size={20} />
                     </a>
                 </div>
             </motion.div>

@@ -4,45 +4,15 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Layers, Target, Compass, Map, LucideIcon } from "lucide-react";
 import { fadeInUp, staggerContainer } from "@/lib/animation-variants";
+import { HERO_SERVICE_CARDS } from "@/data/services";
 
-interface ServiceCard {
-    title: string;
-    icon: LucideIcon;
-    description: string;
-    href: string;
-    color: string;
-}
+const ICON_MAP: Record<string, LucideIcon> = {
+    "브랜딩": Layers,
+    "마케팅": Target,
+    "컨설팅": Compass,
+    "오프라인": Map,
+};
 
-const SERVICE_CARDS: ServiceCard[] = [
-    {
-        title: "브랜딩",
-        icon: Layers,
-        description: "VI 아이덴티티\n홈페이지 제작\n사진·영상 제작",
-        href: "/services#branding",
-        color: "from-[#D60000] to-[#FF2222]",
-    },
-    {
-        title: "마케팅",
-        icon: Target,
-        description: "검색광고\n블로그·카페\nSNS·유튜브",
-        href: "/services#marketing",
-        color: "from-blue-500 to-blue-600",
-    },
-    {
-        title: "컨설팅",
-        icon: Compass,
-        description: "개원 컨설팅\n경영 전략\n내부 시스템",
-        href: "/services#consulting",
-        color: "from-purple-500 to-purple-600",
-    },
-    {
-        title: "오프라인",
-        icon: Map,
-        description: "버스·택배 광고\n인쇄물 디자인\n배포 마케팅",
-        href: "/services#offline",
-        color: "from-green-500 to-green-600",
-    },
-];
 
 export default function ServiceCards() {
     return (
@@ -52,8 +22,8 @@ export default function ServiceCards() {
             variants={staggerContainer}
             className="grid grid-cols-2 md:grid-cols-2 gap-2 sm:gap-4 md:gap-5"
         >
-            {SERVICE_CARDS.map((card) => {
-                const Icon = card.icon;
+            {HERO_SERVICE_CARDS.map((card) => {
+                const Icon = ICON_MAP[card.title] ?? Layers;
                 const links = card.description.split('\n');
                 return (
                     <motion.div

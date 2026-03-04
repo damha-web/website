@@ -3,10 +3,20 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { PORTFOLIO_PREVIEWS } from "@/lib/portfolio-preview";
+import { PORTFOLIO_CATEGORIES } from "@/lib/portfolio-preview";
 import { InteractiveImageAccordion } from "@/components/ui/interactive-image-accordion";
+import { FEATURED_CLIENTS } from "@/data/clients";
 
 export default function PortfolioPreview() {
+    // 아코디언 컴포넌트용 데이터 매핑
+    const accordionItems = PORTFOLIO_CATEGORIES.map((cat) => ({
+        id: cat.id,
+        title: cat.title.replace("\n", " "),
+        category: cat.category,
+        client: cat.subtitle,
+        image: cat.image,
+    }));
+
     return (
         <section className="py-24 md:py-32 bg-white overflow-hidden relative font-sans">
             <div className="container mx-auto px-6">
@@ -34,10 +44,10 @@ export default function PortfolioPreview() {
 
                         <div className="mb-16 xl:mb-0">
                             <Link
-                                href="/portfolio"
+                                href="/services"
                                 className="inline-flex items-center gap-3 bg-secondary text-white font-semibold px-8 py-4 rounded-full shadow-lg hover:bg-primary transition-all duration-300 group mb-12"
                             >
-                                전체 포트폴리오 보기
+                                서비스 알아보기
                                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                             </Link>
 
@@ -57,18 +67,12 @@ export default function PortfolioPreview() {
                                 >
                                     {[...Array(2)].map((_, idx) => (
                                         <div key={idx} className="flex gap-6 lg:gap-8 px-3 lg:px-4 items-center">
-                                            <span className="font-bold text-base lg:text-lg text-secondary">서울대학교병원</span>
-                                            <span className="w-1.5 h-1.5 rounded-full bg-primary/30" />
-                                            <span className="font-bold text-base lg:text-lg text-secondary">연세세브란스</span>
-                                            <span className="w-1.5 h-1.5 rounded-full bg-primary/30" />
-                                            <span className="font-bold text-base lg:text-lg text-secondary">고려대학교의료원</span>
-                                            <span className="w-1.5 h-1.5 rounded-full bg-primary/30" />
-                                            <span className="font-bold text-base lg:text-lg text-secondary">가톨릭성모병원</span>
-                                            <span className="w-1.5 h-1.5 rounded-full bg-primary/30" />
-                                            <span className="font-bold text-base lg:text-lg text-secondary">서울아산병원</span>
-                                            <span className="w-1.5 h-1.5 rounded-full bg-primary/30" />
-                                            <span className="font-bold text-base lg:text-lg text-secondary">삼성서울병원</span>
-                                            <span className="w-1.5 h-1.5 rounded-full bg-primary/30" />
+                                            {FEATURED_CLIENTS.map((name) => (
+                                                <span key={name} className="contents">
+                                                    <span className="font-bold text-base lg:text-lg text-secondary">{name}</span>
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-primary/30" />
+                                                </span>
+                                            ))}
                                         </div>
                                     ))}
                                 </motion.div>
@@ -84,8 +88,7 @@ export default function PortfolioPreview() {
                         viewport={{ once: true, margin: "-100px" }}
                         transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
                     >
-                        {/* Using the first 5 portfolio items optimally for the accordion UI */}
-                        <InteractiveImageAccordion items={PORTFOLIO_PREVIEWS.slice(0, 5)} />
+                        <InteractiveImageAccordion items={accordionItems} />
                     </motion.div>
 
                 </div>

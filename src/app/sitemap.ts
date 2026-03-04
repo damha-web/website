@@ -1,16 +1,8 @@
 import { MetadataRoute } from "next";
-import { PORTFOLIO_PREVIEWS } from "@/lib/portfolio-preview";
 
 const BASE_URL = "https://damha.co.kr";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const portfolioEntries = PORTFOLIO_PREVIEWS.map((item) => ({
-    url: `${BASE_URL}/portfolio/${item.slug}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-  }));
-
   return [
     {
       url: BASE_URL,
@@ -36,6 +28,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
-    ...portfolioEntries,
+    {
+      url: `${BASE_URL}/web`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
   ];
 }

@@ -7,8 +7,10 @@ import { Globe } from "@/components/ui/globe";
 import {
     Layers, LineChart, Compass, ArrowRight, PenTool,
     Search, Newspaper, Rocket, Scale, Video,
-    Lock, UserCheck, ShieldAlert, LayoutTemplate, CheckCircle2, GraduationCap, Bus, Printer, MapPin, Map, Camera, Gavel
+    Lock, UserCheck, ShieldAlert, LayoutTemplate, CheckCircle2, GraduationCap, Bus, Printer, MapPin, Map, Camera, Gavel,
+    BarChart3, MessageSquare, FileText, AlertTriangle, ShieldCheck, ChevronDown, Phone, Globe2, MessageCircle, Mail
 } from "lucide-react";
+import { COMPANY } from "@/data/company";
 
 // The expanded services content
 const SERVICES = [
@@ -37,8 +39,8 @@ const SERVICES = [
         ],
         specialFeature: {
             title: "MOT (Moments of Truth) 설계 모델",
-            desc: "환자의 결정적 순간 5단계를 정의하고, 각 접점별로 최적화된 시각적, 심리적 경험을 제공하여 이탈 없는 브랜드 로열티를 형성합니다.",
-            tags: ["인지", "탐색", "예약", "진료", "사후관리"]
+            desc: "환자의 결정적 순간 6단계를 정의하고, 각 접점별로 최적화된 시각적, 심리적 경험을 제공하여 이탈 없는 브랜드 로열티를 형성합니다.",
+            tags: ["인지", "탐색", "예약 및 방문", "진료 및 상담", "진료 후 관리", "리뷰 및 추천"]
         },
         process: [
             "환자 여정 분석 (MOT Map)",
@@ -422,6 +424,186 @@ export default function ServicesPage() {
                 ))}
             </div>
 
+            {/* Quality Management System */}
+            <section className="py-28 bg-gray-50 relative overflow-hidden">
+                <div className="container mx-auto px-6 max-w-6xl relative z-10">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-16"
+                    >
+                        <span className="inline-block px-3 py-1 bg-[#D60000]/10 text-[#D60000] rounded-full text-xs font-bold tracking-widest uppercase mb-4">
+                            Quality Assurance
+                        </span>
+                        <h2 className="text-4xl md:text-5xl font-black text-[#1F1F1F] mb-6">
+                            운영 <span className="text-[#D60000]">품질관리</span> 시스템
+                        </h2>
+                        <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                            감이 아닌 데이터로, 추측이 아닌 검증된 프로세스로 운영합니다
+                        </p>
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {[
+                            { icon: <BarChart3 className="w-6 h-6" />, title: "포스팅 지수 평가", desc: "유료 전문 프로그램을 통한 콘텐츠 품질 및 포스팅 지수 정량 평가" },
+                            { icon: <Search className="w-6 h-6" />, title: "노출 품질 평가", desc: "내부 개발 프로그램을 활용한 키워드 노출 순위 및 품질 모니터링" },
+                            { icon: <FileText className="w-6 h-6" />, title: "월간 정기 보고", desc: "매월 1회 정기 마케팅 보고서 전달 및 광고주 니즈 반영 전략 수립" },
+                            { icon: <AlertTriangle className="w-6 h-6" />, title: "부정이슈 데일리 피드백", desc: "네이버 및 매체별 부정이슈 실시간 모니터링 및 당일 피드백 대응" },
+                            { icon: <ShieldCheck className="w-6 h-6" />, title: "불만족 리뷰 대응", desc: "위임장 접수 → 법적 사실관계 분석 → 네이버 고객센터 접수까지 체계적 방어" },
+                            { icon: <MessageSquare className="w-6 h-6" />, title: "실시간 소통 체계", desc: "카카오톡 단체채팅 기반 부서 팀장급 + 병원 담당자 직접 소통" },
+                        ].map((item, idx) => (
+                            <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: idx * 0.08 }}
+                                className="bg-white rounded-2xl p-7 border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group"
+                            >
+                                <div className="w-12 h-12 bg-[#D60000]/5 rounded-xl flex items-center justify-center text-[#D60000] mb-4 group-hover:bg-[#D60000] group-hover:text-white transition-colors duration-300">
+                                    {item.icon}
+                                </div>
+                                <h3 className="text-lg font-bold text-[#1F1F1F] mb-2">{item.title}</h3>
+                                <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Patient Acquisition Flow */}
+            <section className="py-28 bg-white relative overflow-hidden">
+                <div className="container mx-auto px-6 max-w-5xl relative z-10">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-16"
+                    >
+                        <span className="inline-block px-3 py-1 bg-[#D60000]/10 text-[#D60000] rounded-full text-xs font-bold tracking-widest uppercase mb-4">
+                            Patient Journey
+                        </span>
+                        <h2 className="text-4xl md:text-5xl font-black text-[#1F1F1F] mb-6">
+                            광고 <span className="text-[#D60000]">고객 여정</span> 플로우
+                        </h2>
+                        <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                            온·오프라인 통합 채널에서 환자가 내원하기까지의 체계적 여정
+                        </p>
+                    </motion.div>
+
+                    {/* Flow Steps */}
+                    <div className="flex flex-col items-center gap-0">
+                        {/* Step 1: Channels */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="w-full bg-gray-50 rounded-2xl p-8 border border-gray-100"
+                        >
+                            <div className="flex items-center gap-3 mb-5">
+                                <div className="w-10 h-10 bg-[#D60000] rounded-xl flex items-center justify-center text-white font-black text-sm">01</div>
+                                <h3 className="text-xl font-bold text-[#1F1F1F]">유입 채널</h3>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                {["브랜드블로그", "노출형블로그", "네이버카페", "네이버검색광고", "구글영상광고", "구글배너광고", "카카오디스플레이", "카카오비즈보드", "당근배너", "유튜브채널", "랜딩페이지", "카카오채널", "오프라인영업"].map((ch, i) => (
+                                    <span key={i} className="px-3 py-1.5 bg-white rounded-full text-sm font-medium text-gray-600 border border-gray-200">
+                                        {ch}
+                                    </span>
+                                ))}
+                            </div>
+                        </motion.div>
+
+                        {/* Arrow */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true }}
+                            className="py-3 text-[#D60000]"
+                        >
+                            <ChevronDown className="w-8 h-8" />
+                        </motion.div>
+
+                        {/* Step 2: Touchpoints */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.1 }}
+                            className="w-full bg-gray-50 rounded-2xl p-8 border border-gray-100"
+                        >
+                            <div className="flex items-center gap-3 mb-5">
+                                <div className="w-10 h-10 bg-[#D60000] rounded-xl flex items-center justify-center text-white font-black text-sm">02</div>
+                                <h3 className="text-xl font-bold text-[#1F1F1F]">접점</h3>
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                {[
+                                    { icon: <Phone className="w-5 h-5" />, label: "전화연결" },
+                                    { icon: <Globe2 className="w-5 h-5" />, label: "홈페이지연결" },
+                                    { icon: <MessageCircle className="w-5 h-5" />, label: "빠른상담신청" },
+                                    { icon: <Mail className="w-5 h-5" />, label: "카카오채널 채팅" },
+                                ].map((tp, i) => (
+                                    <div key={i} className="flex items-center gap-3 bg-white rounded-xl px-4 py-3 border border-gray-200">
+                                        <span className="text-[#D60000]">{tp.icon}</span>
+                                        <span className="text-sm font-semibold text-[#1F1F1F]">{tp.label}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </motion.div>
+
+                        {/* Arrow */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true }}
+                            className="py-3 text-[#D60000]"
+                        >
+                            <ChevronDown className="w-8 h-8" />
+                        </motion.div>
+
+                        {/* Step 3: Consultation */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.2 }}
+                            className="w-full bg-[#1F1F1F] rounded-2xl p-8 text-white"
+                        >
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-10 h-10 bg-[#D60000] rounded-xl flex items-center justify-center text-white font-black text-sm">03</div>
+                                <h3 className="text-xl font-bold">인콜/아웃콜 상담 및 예약</h3>
+                            </div>
+                            <p className="text-white/60 leading-relaxed">전문 상담팀이 환자의 니즈를 정확히 파악하고, 최적의 진료 일정을 안내하여 예약을 확정합니다.</p>
+                        </motion.div>
+
+                        {/* Arrow */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true }}
+                            className="py-3 text-[#D60000]"
+                        >
+                            <ChevronDown className="w-8 h-8" />
+                        </motion.div>
+
+                        {/* Step 4: Visit */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.3 }}
+                            className="w-full bg-gradient-to-r from-[#D60000] to-[#FF4444] rounded-2xl p-8 text-white"
+                        >
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-white font-black text-sm">04</div>
+                                <h3 className="text-xl font-bold">문자 전송 → 내원</h3>
+                            </div>
+                            <p className="text-white/80 leading-relaxed">예약 확인 문자와 내원 안내를 자동 발송하여 이탈률을 최소화하고, 환자의 실제 내원까지 연결합니다.</p>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+
             {/* Why Choose Damha - Redesigned */}
             <section className="py-32 bg-[#1F1F1F] text-white relative overflow-hidden">
                 <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#D60000]/10 rounded-full blur-[120px] pointer-events-none" />
@@ -502,7 +684,7 @@ export default function ServicesPage() {
 
                             <MagneticWrapper>
                                 <a
-                                    href="https://accounts.kakao.com/login/?continue=http%3A%2F%2Fpf.kakao.com%2F_Jxldks%2Fchat#login"
+                                    href={COMPANY.kakaoUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-white text-[#D60000] font-bold rounded-full border border-red-100 shadow-sm hover:shadow-md hover:border-red-200 transition-all text-lg"

@@ -4,30 +4,7 @@ import { motion, Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-
-const SERVICES = [
-    {
-        id: "branding",
-        title: "Branding",
-        image: "/images/services/v2/branding.png",
-        description: "병원의 고유한 아이덴티티를 확립하고 차별화된 핵심 가치를 환자의 마음에 깊이 각인시키는 프리미엄 디자인 설계",
-        link: "/services#branding",
-    },
-    {
-        id: "marketing",
-        title: "Marketing",
-        image: "/images/services/v2/marketing.png",
-        description: "통합적이고 체계적인 데이터 분석 기반 디지털 퍼포먼스 마케팅 전략으로 실질적인 신환 창출과 폭발적인 매출 증대",
-        link: "/services#marketing",
-    },
-    {
-        id: "consulting",
-        title: "Consulting",
-        image: "/images/services/v2/consulting.png",
-        description: "10년 이상의 병원 특화 실무 노하우를 바탕으로 한 경영 진단, 목표 달성 전략 수립 및 핵심 내부 시스템 최적화",
-        link: "/services#consulting",
-    },
-];
+import { HOME_SERVICES } from "@/data/services";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -86,13 +63,13 @@ export default function Products() {
 
                 {/* Services Grid */}
                 <motion.div
-                    className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
                     variants={containerVariants}
                     initial="hidden"
                     whileInView="show"
                     viewport={{ once: false, margin: "-50px" }}
                 >
-                    {SERVICES.map((service) => (
+                    {HOME_SERVICES.map((service) => (
                         <motion.div
                             key={service.id}
                             variants={cardVariants}
@@ -101,7 +78,7 @@ export default function Products() {
                             {/* Card Accent Color Hover background */}
                             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-16 -mt-16 transition-transform duration-500 group-hover:scale-[2.5] z-20 pointer-events-none" />
 
-                            <div className="relative z-10 w-full h-72 sm:h-80 overflow-hidden">
+                            <div className="relative z-10 w-full h-56 sm:h-64 overflow-hidden">
                                 <Image
                                     src={service.image}
                                     alt={service.title}

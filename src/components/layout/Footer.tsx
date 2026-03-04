@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MoveRight } from "lucide-react";
+import { COMPANY } from "@/data/company";
 
 export default function Footer() {
     return (
@@ -28,13 +29,13 @@ export default function Footer() {
                     {/* Contact Info */}
                     <div className="md:text-right">
                         <p className="text-xl font-semibold mb-2 text-white/80">상담 문의</p>
-                        <p className="text-2xl md:text-3xl font-bold tracking-tight mb-2 text-primary">051.757.0719</p>
-                        <p className="text-lg font-medium text-white/60 mb-6">M. 010.2983.4744</p>
+                        <p className="text-2xl md:text-3xl font-bold tracking-tight mb-2 text-primary">{COMPANY.phoneDisplay}</p>
+                        <p className="text-lg font-medium text-white/60 mb-6">M. {COMPANY.mobileDisplay}</p>
                         <Link
-                            href="mailto:brand@damha.co.kr"
+                            href={`mailto:${COMPANY.email}`}
                             className="inline-flex items-center gap-2 bg-white/10 hover:bg-primary transition-colors duration-300 px-6 py-3 rounded-full text-sm"
                         >
-                            brand@damha.co.kr <MoveRight size={16} />
+                            {COMPANY.email} <MoveRight size={16} />
                         </Link>
                     </div>
                 </div>
@@ -45,10 +46,10 @@ export default function Footer() {
                 {/* Info Box */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm text-white/50">
                     <div>
-                        <p><strong className="text-white">주식회사 담하</strong></p>
-                        <p>대표이사: 정승우</p>
-                        <p>사업자등록번호: 247-81-03001</p>
-                        <p>주소: 부산광역시 동래구 연안로59번길 7, 5층</p>
+                        <p><strong className="text-white">{COMPANY.name}</strong></p>
+                        <p>대표이사: {COMPANY.ceo}</p>
+                        <p>사업자등록번호: {COMPANY.businessNumber}</p>
+                        <p>주소: {COMPANY.address}</p>
                     </div>
                     <div className="md:text-right space-y-2">
                         <nav className="flex flex-wrap md:justify-end gap-x-6 gap-y-2 mb-4">

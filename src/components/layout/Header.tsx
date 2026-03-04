@@ -5,12 +5,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { COMPANY } from "@/data/company";
 
 
 const NAV_LINKS = [
     { label: "Home", href: "/" },
     { label: "About", href: "/about" },
     { label: "Services", href: "/services" },
+    { label: "Web", href: "/web" },
     { label: "Portfolio", href: "/portfolio" },
 ];
 
@@ -111,8 +113,8 @@ export default function Header() {
 
                         <div className="mt-auto pb-16">
                             <p className="text-white/20 text-sm font-bold tracking-widest uppercase mb-4">Contacts</p>
-                            <p className="text-white/60 text-lg">051-757-0719</p>
-                            <p className="text-white/60 text-lg">brand@damha.co.kr</p>
+                            <p className="text-white/60 text-lg">{COMPANY.phone}</p>
+                            <p className="text-white/60 text-lg">{COMPANY.email}</p>
                         </div>
                     </motion.div>
                 )}
