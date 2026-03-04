@@ -7,7 +7,6 @@ const PhilosophySection = dynamic(() => import("@/components/home/PhilosophySect
 const ShaderCallout = dynamic(() => import("@/components/home/ShaderCallout"));
 const PortfolioPreview = dynamic(() => import("@/components/home/PortfolioPreview"));
 const TrustSection = dynamic(() => import("@/components/home/TrustSection"));
-const FabContact = dynamic(() => import("@/components/home/FabContact"));
 
 export default function Home() {
   return (
@@ -18,8 +17,6 @@ export default function Home() {
       <ShaderCallout />
       <PortfolioPreview />
       <TrustSection />
-
-      <FabContact />
     </div>
   );
 }
