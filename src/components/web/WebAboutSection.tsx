@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { fadeInUp, slideInFromLeft, slideInFromRight } from "@/lib/animation-variants";
 
@@ -15,6 +16,7 @@ const CAPABILITIES = [
 ];
 
 function RadarChart() {
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const cx = 150;
     const cy = 150;
     const maxR = 110;
@@ -70,19 +72,56 @@ function RadarChart() {
                 style={{ transformOrigin: `${cx}px ${cy}px` }}
             />
 
-            {/* Data dots */}
+            {/* Data dots with hover interaction */}
             {dataPoints.map((p, i) => (
-                <motion.circle
-                    key={i}
-                    cx={p.x}
-                    cy={p.y}
-                    r={4}
-                    fill="#D60000"
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.3 + i * 0.05 }}
-                />
+                <g key={i}>
+                    {/* Invisible larger hit area for easier hover/touch */}
+                    <circle
+                        cx={p.x}
+                        cy={p.y}
+                        r={16}
+                        fill="transparent"
+                        className="cursor-pointer"
+                        onMouseEnter={() => setHoveredIndex(i)}
+                        onMouseLeave={() => setHoveredIndex(null)}
+                        onTouchStart={() => setHoveredIndex(i === hoveredIndex ? null : i)}
+                    />
+                    <motion.circle
+                        cx={p.x}
+                        cy={p.y}
+                        r={hoveredIndex === i ? 6 : 4}
+                        fill="#D60000"
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.3 + i * 0.05 }}
+                        style={{ pointerEvents: "none" }}
+                    />
+                    {/* Tooltip */}
+                    {hoveredIndex === i && (
+                        <g>
+                            <rect
+                                x={p.x - 24}
+                                y={p.y - 30}
+                                width={48}
+                                height={22}
+                                rx={6}
+                                fill="#1F1F1F"
+                                fillOpacity={0.9}
+                            />
+                            <text
+                                x={p.x}
+                                y={p.y - 19}
+                                textAnchor="middle"
+                                dominantBaseline="central"
+                                className="text-[11px] font-bold"
+                                fill="#D60000"
+                            >
+                                {CAPABILITIES[i].value}%
+                            </text>
+                        </g>
+                    )}
+                </g>
             ))}
 
             {/* Labels */}
@@ -107,7 +146,7 @@ function RadarChart() {
 
 export default function WebAboutSection() {
     return (
-        <section className="py-24 md:py-32 bg-surface-alt">
+        <section id="about" className="py-24 md:py-32 bg-surface-alt">
             <div className="container mx-auto px-6 max-w-[1280px]">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                     {/* Left - Text */}

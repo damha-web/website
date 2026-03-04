@@ -43,7 +43,7 @@ const cardVariants: Variants = {
 
 export default function ProblemSection() {
     return (
-        <section className="py-24 md:py-32 bg-surface-light">
+        <section id="problem" className="py-24 md:py-32 bg-surface-light">
             <div className="container mx-auto px-6 max-w-[1280px]">
                 {/* Section Header */}
                 <motion.div

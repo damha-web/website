@@ -44,16 +44,20 @@ export default function HeroTitle() {
     }, [displayText, phase, currentTitleIndex]);
 
     const showCursor = phase === 'typing' || phase === 'wait' || phase === 'deleting' || phase === 'pause';
+    const displayLines = displayText.split('\n');
+    const currentFullTextLines = TITLES[currentTitleIndex].main.split('\n');
 
     return (
         <motion.div variants={fadeInUp} className="space-y-5 min-h-[220px]">
-            <h1 className="text-white font-semibold text-[2.5rem] md:text-[3.5rem] lg:text-[4rem] leading-[1.1] tracking-tight whitespace-pre-wrap min-h-[140px] flex items-end">
-                <span className="relative">
-                    {displayText}
-                    {showCursor && (
-                        <span className="font-normal animate-[pulse_0.8s_ease-in-out_infinite] inline-block ml-1 -translate-y-1 not-italic" style={{ color: '#F05050' }}>|</span>
-                    )}
-                </span>
+            <h1 className="text-white font-semibold text-[2.5rem] md:text-[3.5rem] lg:text-[4rem] leading-[1.1] tracking-tight min-h-[140px] flex flex-col justify-end">
+                {currentFullTextLines.map((_, index) => (
+                    <span key={index} className="block min-h-[1.1em]">
+                        {displayLines[index] !== undefined ? displayLines[index] : ""}
+                        {displayLines.length === index + 1 && showCursor && (
+                            <span className="font-normal animate-[pulse_0.8s_ease-in-out_infinite] inline-block ml-1 -translate-y-1 not-italic" style={{ color: '#F05050' }}>|</span>
+                        )}
+                    </span>
+                ))}
             </h1>
             <AnimatePresence mode="wait">
                 <motion.p

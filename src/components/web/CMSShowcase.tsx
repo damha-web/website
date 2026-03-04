@@ -11,7 +11,7 @@ export default function CMSShowcase() {
     const activeFeature = CMS_FEATURES[activeTab];
 
     return (
-        <section className="py-24 md:py-32 bg-[#1F1F1F]">
+        <section id="cms" className="py-24 md:py-32 bg-[#1F1F1F]">
             <div className="container mx-auto px-6 max-w-[1280px]">
                 {/* Header */}
                 <motion.div
@@ -32,18 +32,39 @@ export default function CMSShowcase() {
                     </p>
                 </motion.div>
 
-                {/* Tab Navigation */}
-                <div className="mb-10 overflow-x-auto scrollbar-hide">
+                {/* Mobile Tab Select */}
+                <div className="md:hidden mb-10 mt-6 relative z-10">
+                    <div className="relative">
+                        <select
+                            value={activeTab}
+                            onChange={(e) => setActiveTab(Number(e.target.value))}
+                            className="w-full bg-[#1A1A1A] text-white px-4 py-3.5 rounded-xl border border-white/20 appearance-none outline-none focus:border-primary/50 transition-colors shadow-2xl"
+                        >
+                            {CMS_FEATURES.map((feature, index) => (
+                                <option key={feature.id} value={index}>
+                                    {feature.tab}
+                                </option>
+                            ))}
+                        </select>
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-white/50">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Desktop Tab Navigation */}
+                <div className="hidden md:block mb-10 overflow-x-auto scrollbar-hide">
                     <div className="flex gap-2 min-w-max justify-center">
                         {CMS_FEATURES.map((feature, index) => (
                             <button
                                 key={feature.id}
                                 onClick={() => setActiveTab(index)}
-                                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 whitespace-nowrap ${
-                                    activeTab === index
+                                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 whitespace-nowrap ${activeTab === index
                                         ? "bg-primary text-white"
                                         : "bg-white/10 text-white/50 hover:bg-white/20 hover:text-white/80"
-                                }`}
+                                    }`}
                             >
                                 {feature.tab}
                             </button>

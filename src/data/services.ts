@@ -12,6 +12,7 @@ export const HERO_SERVICE_CARDS: HeroServiceCard[] = [
     { title: "브랜딩", description: "VI 아이덴티티\n홈페이지 제작\n사진·영상 제작", href: "/services#branding", keywords: ["로고", "비주얼", "영상", "촬영", "웹사이트", "브랜드"] },
     { title: "마케팅", description: "검색광고\n블로그·카페\nSNS·유튜브", href: "/services#marketing", keywords: ["플레이스", "인스타", "페이스북", "바이럴", "상위노출"] },
     { title: "컨설팅", description: "개원 컨설팅\n경영 전략\n내부 시스템", href: "/services#consulting", keywords: ["개원", "병원", "손해사정", "경영", "전략", "시스템"] },
+    { title: "고객 관리(CS)", description: "직원 응대 매뉴얼 제작\n컴플레인 대처 교육\n부정 리뷰 방어", href: "/services#consulting", keywords: ["고객관리", "CS", "조직문화", "매뉴얼", "교육", "리뷰", "불만족"] },
     { title: "오프라인", description: "버스·택배 광고\n인쇄물 디자인\n배포 마케팅", href: "/services#offline", keywords: ["버스", "택배", "전단지", "옥외광고", "인쇄"] },
 ];
 

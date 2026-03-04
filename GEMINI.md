@@ -23,3 +23,8 @@
 - Designs: `docs/02-design/features/`
 - Analysis: `docs/03-analysis/`
 - Reports: `docs/04-report/`
+
+## 5. Sub-Agent & Orchestration Rules (Phase 1)
+- **PDCA Workflow**: Explicitly run Plan ➔ Do ➔ Check ➔ Act using built-in thought process before writing complex code or bug fixes. document logic in artifacts.
+- **Browser QA**: Use the built-in `browser_subagent` to visually verify UI changes and rendering on the local server after completing frontend tasks.
+- **Knowledge Re-use**: Always review and utilize generated Knowledge Items (KI) via the Knowledge Subagent to avoid redundant analysis.

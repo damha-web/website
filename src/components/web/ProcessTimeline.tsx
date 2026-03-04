@@ -22,7 +22,7 @@ const stepVariants: Variants = {
 
 export default function ProcessTimeline() {
     return (
-        <section className="py-24 md:py-32 bg-surface-alt overflow-hidden">
+        <section id="process" className="py-24 md:py-32 bg-surface-alt overflow-hidden">
             <div className="container mx-auto px-6 max-w-[1280px]">
                 {/* Header */}
                 <motion.div

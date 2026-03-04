@@ -103,7 +103,7 @@ export default function HeroSearch({ onTagClick }: HeroSearchProps) {
 
             {/* Quick Tags */}
             <div className="flex flex-nowrap md:flex-wrap gap-2 mt-3 md:mt-5 pb-2 md:pb-0 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                {["#브랜딩", "#마케팅", "#컨설팅", "#오프라인", "#웹사이트", "#손해사정"].map((tag) => (
+                {["#브랜딩", "#마케팅", "#컨설팅", "#오프라인", "#웹사이트", "#고객관리"].map((tag) => (
                     <button
                         key={tag}
                         onClick={() => handleTagClick(tag)}

@@ -24,7 +24,7 @@ const cardVariants: Variants = {
 
 export default function ServicePricing() {
     return (
-        <section className="py-24 md:py-32 bg-surface-light">
+        <section id="service" className="py-24 md:py-32 bg-surface-alt">
             <div className="container mx-auto px-6 max-w-[1280px]">
                 {/* Header */}
                 <motion.div

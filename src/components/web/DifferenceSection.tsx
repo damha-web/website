@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion, Variants } from "framer-motion";
 import { Lightbulb, Shield, Puzzle, Rocket } from "lucide-react";
 
@@ -48,8 +49,10 @@ const cardVariants: Variants = {
 };
 
 export default function DifferenceSection() {
+    const [flippedIndex, setFlippedIndex] = useState<number | null>(null);
+
     return (
-        <section className="py-24 md:py-32 bg-surface-light">
+        <section id="difference" className="py-24 md:py-32 bg-surface-light">
             <div className="container mx-auto px-6 max-w-[1280px]">
                 {/* Header */}
                 <motion.div
@@ -75,15 +78,16 @@ export default function DifferenceSection() {
                     viewport={{ once: true, margin: "-50px" }}
                     className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto mb-16"
                 >
-                    {DIFFERENCES.map((diff) => {
+                    {DIFFERENCES.map((diff, index) => {
                         const Icon = diff.icon;
                         return (
                             <motion.div
                                 key={diff.title}
                                 variants={cardVariants}
-                                className="group [perspective:1000px]"
+                                className="group [perspective:1000px] cursor-pointer"
+                                onClick={() => setFlippedIndex(flippedIndex === index ? null : index)}
                             >
-                                <div className="relative w-full h-64 md:h-72 transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+                                <div className={`relative w-full h-64 md:h-72 transition-transform duration-700 [transform-style:preserve-3d] md:group-hover:[transform:rotateY(180deg)] ${flippedIndex === index ? "[transform:rotateY(180deg)]" : ""}`}>
                                     {/* Front */}
                                     <div className="absolute inset-0 [backface-visibility:hidden] bg-white rounded-3xl border border-gray-100 shadow-sm p-8 flex flex-col items-center justify-center text-center">
                                         <div className="w-16 h-16 rounded-2xl bg-primary/5 flex items-center justify-center mb-6">

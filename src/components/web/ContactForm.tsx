@@ -24,11 +24,34 @@ export default function ContactForm() {
         message: "",
     });
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        // TODO: 실제 폼 제출 로직 연동
-        setIsSubmitted(true);
+        setIsLoading(true);
+        setError("");
+
+        try {
+            const res = await fetch("/api/web-contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                setError(data.error ?? "오류가 발생했습니다.");
+                return;
+            }
+
+            setIsSubmitted(true);
+        } catch {
+            setError("네트워크 오류가 발생했습니다. 다시 시도해주세요.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const productOptions: { value: ProductInterest; label: string }[] = [
@@ -147,12 +170,19 @@ export default function ContactForm() {
                                     />
                                 </div>
 
+                                {error && (
+                                    <p className="text-red-400 text-sm bg-red-400/10 border border-red-400/20 rounded-xl px-4 py-3">
+                                        {error}
+                                    </p>
+                                )}
+
                                 <button
                                     type="submit"
-                                    className="w-full py-4 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all duration-300 flex items-center justify-center gap-2 text-lg group"
+                                    disabled={isLoading}
+                                    className="w-full py-4 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all duration-300 flex items-center justify-center gap-2 text-lg group disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    상담 신청하기
-                                    <Send size={18} className="group-hover:translate-x-1 transition-transform" />
+                                    {isLoading ? "전송 중..." : "상담 신청하기"}
+                                    {!isLoading && <Send size={18} className="group-hover:translate-x-1 transition-transform" />}
                                 </button>
                             </form>
                         )}

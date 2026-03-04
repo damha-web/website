@@ -22,7 +22,7 @@ export default function ServiceCards() {
             variants={staggerContainer}
             className="grid grid-cols-2 md:grid-cols-2 gap-2 sm:gap-4 md:gap-5"
         >
-            {HERO_SERVICE_CARDS.map((card) => {
+            {HERO_SERVICE_CARDS.filter(card => card.title !== "고객 관리(CS)").map((card) => {
                 const Icon = ICON_MAP[card.title] ?? Layers;
                 const links = card.description.split('\n');
                 return (
