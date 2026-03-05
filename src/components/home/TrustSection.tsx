@@ -214,10 +214,10 @@ export default function TrustSection() {
                                     </div>
                                 </div>
                                 {/* Connection Line */}
-                                <svg className="w-full h-8 absolute top-1/2 -translate-y-1/2 z-0" preserveAspectRatio="none">
-                                    <path d="M 30,16 Q 50,24 70,16" fill="none" className="stroke-gray-200 group-hover:stroke-primary/50 transition-colors duration-500" strokeWidth="2" strokeDasharray="4 4" />
+                                <svg className="w-full h-8 absolute top-1/2 -translate-y-1/2 z-0" viewBox="0 0 100 32" preserveAspectRatio="none">
+                                    <path d="M 21,16 Q 50,28 79,16" fill="none" className="stroke-gray-200 group-hover:stroke-primary/50 transition-colors duration-500" strokeWidth="1.5" strokeDasharray="3 3" />
                                     <motion.circle
-                                        cx="50" cy="20" r="3"
+                                        cx="50" cy="22" r="2.5"
                                         className="fill-primary"
                                         variants={{
                                             hidden: { opacity: 0, scale: 0 },

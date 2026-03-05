@@ -1,50 +1,35 @@
-# 웹제작부 서브페이지 와이어프레임 리서치
+# PhilosophySection 리디자인 리서치
 
-## 1. 현재 사이트 구조
+## 현재 구현 (PhilosophySection.tsx)
+- 구조: 좌 35% sticky 이미지 + 우 65% 스크롤 콘텐츠
+- 배경: `damha_mesh_decor.png` (background-attachment: fixed, opacity 0.3)
+- 이미지: `code.jpg` — 둥근 카드 + 플로팅 인용구
+- 콘텐츠: 3개 항목 카드 형태 (space-y-[60vh])로 세로 스크롤
+- 애니메이션: framer-motion useScroll + parallax + TextReveal
+- 문제점: 스크롤 영역이 매우 길고(60vh 간격), 카드 형태가 참고 디자인과 다름
 
-```
-/ (Home)         → Hero, Products, Philosophy, ShaderCallout, PortfolioPreview, TrustSection
-/about           → 조직도, 회사 이력
-/services        → 브랜딩/마케팅/컨설팅/오프라인 서비스
-/portfolio       → 프로젝트 목록 (카테고리 필터)
-/portfolio/[slug] → Case Study 상세
-```
+## 참고 사이트 (beautifulmom.net) 분석
+- 레이아웃: 좌측 이미지(50%) + 우측 아코디언 리스트(50%)
+- 좌측: 배경 이미지가 섹션 높이만큼 꽉 참 (cover)
+  - 이미지 위에 반투명 오버레이 + 텍스트 ("아름다운엄마는 다릅니다")
+- 우측: 6개 항목, 각각 번호(01~06) + 제목(볼드 강조) + 설명(호버 시 slideDown)
+  - 호버 시 jQuery slideDown/slideUp 250ms
+  - 항목 사이 구분선
+  - 첫 번째 항목은 기본 열림 상태
+- 전체 높이: 뷰포트 한 화면 정도, 스크롤 불필요한 컴팩트 레이아웃
 
-## 2. 추가할 서브페이지
+## 담하 콘텐츠 (PHILOSOPHY_CONTENT — 3개)
+1. id: 1 — "경험의 차이" / "실무자의 시선으로 현장을 해석합니다"
+2. id: 2 — "전략의 본질" / "단순한 홍보가 아닌 경영을 마케팅합니다"
+3. id: 3 — "신뢰의 증거" / "성과로 입증하는 담하의 파트너십"
 
-기획안의 10개 섹션을 담은 원페이지 스크롤 랜딩: `/web` (또는 `/web-production`)
-포트폴리오 상세는 기존 `/portfolio/[slug]` 구조 재활용 가능
+## 사용 가능한 이미지
+- `/assets/images/code.jpg` (현재 사용 중 — 코드/개발 느낌)
+- `/assets/images/damha_mesh_decor.png` (현재 배경)
+- `/assets/images/damha_parallax_img.png`, `damha_parallax_2.png`
+- 기타 다수 이미지 (해시 파일명)
 
-## 3. 재활용 가능한 자산
-
-### 컴포넌트
-- Header/Footer: 네비게이션에 "웹제작" 메뉴 항목 추가만 필요
-- FabContact: 플로팅 문의 버튼 그대로 사용
-- UI 컴포넌트: text-reveal, magnetic-wrapper 등 애니메이션 재활용
-- portfolio-preview.ts: 포트폴리오 데이터 구조 참고
-
-### 디자인 시스템
-- 컬러: #D60000 (primary), #1F1F1F (secondary) 유지
-- 기획안에서 언급한 딥퍼플(#3F3D9E)은 웹제작부 섹션 악센트로 선택적 사용 가능
-- 폰트: Montserrat + Pretendard 유지
-- Tailwind 토큰 시스템 유지
-
-## 4. 신규 필요 항목
-
-### 섹션 컴포넌트 (10개)
-1. WebHero - 메인 비주얼 + CTA
-2. ProblemSection - 3가지 Pain Point
-3. WebAboutSection - 부서 소개 + 역량 차트
-4. DifferenceSection - 4가지 차별점 카드
-5. ServicePricing - LITE/BASIC/STANDARD 비교표
-6. CMSShowcase - 12개 탭 인터랙티브
-7. WebPortfolioGrid - 15개 프로젝트 필터링
-8. ProcessTimeline - 8단계 프로세스
-9. ContactForm - 빠른 상담 폼
-10. (Footer는 기존 것 사용)
-
-### 데이터 파일
-- web-products.ts: 상품 라인업 데이터
-- web-portfolio.ts: 웹제작부 포트폴리오 15개
-- cms-features.ts: CMS 기능 12개
-- process-steps.ts: 진행 프로세스 8단계
+## 의존성
+- framer-motion (기존 사용 중)
+- TextReveal 컴포넌트 (기존 사용 중)
+- customFadeInUp (기존 animation-variants)

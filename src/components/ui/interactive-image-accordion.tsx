@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export interface AccordionItemData {
     id: string | number;
@@ -9,7 +10,7 @@ export interface AccordionItemData {
     category?: string;
     client?: string;
     image: string;
-    slug?: string;
+    href?: string;
 }
 
 interface AccordionItemProps {
@@ -20,6 +21,16 @@ interface AccordionItemProps {
 }
 
 const AccordionItem = ({ item, isActive, onMouseEnter, onClick }: AccordionItemProps) => {
+    const router = useRouter();
+
+    const handleClick = () => {
+        if (isActive && item.href) {
+            router.push(item.href);
+        } else {
+            onClick();
+        }
+    };
+
     return (
         <div
             className={`
@@ -28,7 +39,7 @@ const AccordionItem = ({ item, isActive, onMouseEnter, onClick }: AccordionItemP
         ${isActive ? 'w-[75vw] sm:w-[60vw] xl:w-[480px] shrink-0' : 'w-[12vw] sm:w-[80px] shrink-0'}
       `}
             onMouseEnter={onMouseEnter}
-            onClick={onClick}
+            onClick={handleClick}
         >
             <Image
                 src={item.image}

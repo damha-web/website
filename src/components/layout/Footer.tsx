@@ -22,7 +22,7 @@ export default function Footer() {
                             src="/assets/images/7331034dac.svg"
                             alt="인증 및 파트너"
                             style={{ height: '112px' }}
-                            className="w-auto transition-opacity duration-500 hover:opacity-80 cursor-pointer"
+                            className="w-auto"
                         />
                     </div>
 
@@ -56,8 +56,6 @@ export default function Footer() {
                             <Link href="/about" className="hover:text-white transition-colors">회사소개</Link>
                             <Link href="/services" className="hover:text-white transition-colors">서비스</Link>
                             <Link href="/portfolio" className="hover:text-white transition-colors">포트폴리오</Link>
-                            <Link href="#" className="hover:text-white transition-colors">개인정보처리방침</Link>
-                            <Link href="#" className="hover:text-white transition-colors">이용약관</Link>
                         </nav>
                         <p>&copy; {new Date().getFullYear()} DAMHA. All rights reserved.</p>
                     </div>

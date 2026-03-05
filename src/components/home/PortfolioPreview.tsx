@@ -8,6 +8,13 @@ import { InteractiveImageAccordion } from "@/components/ui/interactive-image-acc
 import { FEATURED_CLIENTS } from "@/data/clients";
 
 export default function PortfolioPreview() {
+    const CATEGORY_HREF: Record<string, string> = {
+        Branding: "/services#branding",
+        Marketing: "/services#marketing",
+        Consulting: "/services#consulting",
+        Offline: "/services#offline",
+    };
+
     // 아코디언 컴포넌트용 데이터 매핑
     const accordionItems = PORTFOLIO_CATEGORIES.map((cat) => ({
         id: cat.id,
@@ -15,6 +22,7 @@ export default function PortfolioPreview() {
         category: cat.category,
         client: cat.subtitle,
         image: cat.image,
+        href: CATEGORY_HREF[cat.category],
     }));
 
     return (
