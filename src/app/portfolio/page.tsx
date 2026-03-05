@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, TrendingUp } from "lucide-react";
+import { ArrowUpRight, TrendingUp } from "lucide-react";
 import { PORTFOLIO_CATEGORIES } from "@/lib/portfolio-preview";
 
 export default function PortfolioPage() {
@@ -112,7 +112,7 @@ export default function PortfolioPage() {
                         className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white font-bold rounded-full shadow-lg shadow-primary/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 text-lg"
                     >
                         서비스 알아보기
-                        <ArrowRight size={20} />
+                        <ArrowUpRight size={20} />
                     </Link>
                 </motion.div>
             </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { HOME_SERVICES } from "@/data/services";
@@ -104,7 +104,7 @@ export default function Products() {
                                     >
                                         자세히 보기
                                         <span className="ml-3 bg-gray-50 p-2.5 rounded-full group-hover:bg-primary/10 transition-colors">
-                                            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                                            <ArrowUpRight size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                                         </span>
                                     </Link>
                                 </div>

@@ -8,7 +8,8 @@ import {
     Layers, LineChart, Compass, ArrowRight, PenTool,
     Search, Newspaper, Rocket, Scale, Video,
     Lock, UserCheck, ShieldAlert, LayoutTemplate, CheckCircle2, GraduationCap, Bus, Printer, MapPin, Map, Camera, Gavel,
-    BarChart3, MessageSquare, FileText, AlertTriangle, ShieldCheck, ChevronDown, Phone, Globe2, MessageCircle, Mail
+    BarChart3, MessageSquare, FileText, AlertTriangle, ShieldCheck, ChevronDown, Phone, Globe2, MessageCircle, Mail,
+    HeartHandshake, Stethoscope, Puzzle, Handshake
 } from "lucide-react";
 import { COMPANY } from "@/data/company";
 
@@ -108,7 +109,7 @@ const SERVICES = [
             {
                 title: "고객 관리(CS) 및 조직 문화",
                 description: "맞춤형 직원 응대 매뉴얼 제작, 컴플레인 대처 프로토콜 교육 및 부정 리뷰 방어.",
-                icon: <UserCheck className="w-6 h-6" />
+                icon: <HeartHandshake className="w-6 h-6" />
             }
         ],
         specialFeature: null,
@@ -203,22 +204,26 @@ const WHY_DAMHA = [
     {
         number: "01",
         title: "실무자 출신의 리얼 솔루션",
-        description: "단순히 광고 대행만 해온 사람들이 아닙니다. 대학병원, 간호사, 상담실장 출신들이 현장의 생생한 언어로 직원들과 소통하며 근본적인 문제를 해결합니다."
+        description: "단순히 광고 대행만 해온 사람들이 아닙니다. 대학병원, 간호사, 상담실장 출신들이 현장의 생생한 언어로 직원들과 소통하며 근본적인 문제를 해결합니다.",
+        icon: Stethoscope
     },
     {
         number: "02",
         title: "본질 중심의 통합 전략",
-        description: "유입수만 늘리는 단편적 접근이 아닙니다. 브랜딩(가치 정립)에서 마케팅(확산), 안전관리(리스크 헷지)까지 하나의 통일된 로드맵으로 관리합니다."
+        description: "유입수만 늘리는 단편적 접근이 아닙니다. 브랜딩(가치 정립)에서 마케팅(확산), 안전관리(리스크 헷지)까지 하나의 통일된 로드맵으로 관리합니다.",
+        icon: Puzzle
     },
     {
         number: "03",
         title: "데이터와 현장의 결합",
-        description: "감에 의존하지 않고 전환율과 체류시간 데이터를 분석함과 동시에, 데일리로 현장 분위기와 CS 이슈를 체크하여 입체적인 컨설팅을 진행합니다."
+        description: "감에 의존하지 않고 전환율과 체류시간 데이터를 분석함과 동시에, 데일리로 현장 분위기와 CS 이슈를 체크하여 입체적인 컨설팅을 진행합니다.",
+        icon: LineChart
     },
     {
         number: "04",
         title: "선택 받는 장기 파트너십",
-        description: "95% 이상의 재계약률, 131개 이상의 병원 레퍼런스가 증명합니다. 한번 맺은 인연은 병원이 성장할 때까지 밀착 지원합니다."
+        description: "95% 이상의 재계약률, 131개 이상의 병원 레퍼런스가 증명합니다. 한번 맺은 인연은 병원이 성장할 때까지 밀착 지원합니다.",
+        icon: Handshake
     }
 ];
 
@@ -628,29 +633,32 @@ export default function ServicesPage() {
                         </motion.div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {WHY_DAMHA.map((item, index) => (
-                                <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, y: 30 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: false, amount: 0.2 }}
-                                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                                    className="bg-white/5 backdrop-blur-md p-10 rounded-3xl border border-white/10 hover:bg-white/10 hover:-translate-y-2 transition-all duration-300"
-                                >
-                                    <div className="flex justify-between items-start mb-6">
-                                        <div className="w-12 h-12 bg-gradient-to-br from-[#D60000] to-[#D60000] rounded-2xl flex items-center justify-center">
-                                            <span className="text-white font-black text-xl">{item.number}</span>
+                            {WHY_DAMHA.map((item, index) => {
+                                const Icon = item.icon;
+                                return (
+                                    <motion.div
+                                        key={index}
+                                        initial={{ opacity: 0, y: 30 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: false, amount: 0.2 }}
+                                        transition={{ duration: 0.6, delay: index * 0.1 }}
+                                        className="bg-white/5 backdrop-blur-md p-10 rounded-3xl border border-white/10 hover:bg-white/10 hover:-translate-y-2 transition-all duration-300"
+                                    >
+                                        <div className="flex justify-between items-start mb-6">
+                                            <div className="w-12 h-12 bg-gradient-to-br from-[#D60000] to-[#D60000] rounded-2xl flex items-center justify-center">
+                                                <span className="text-white font-black text-xl">{item.number}</span>
+                                            </div>
+                                            <Icon className="w-6 h-6 text-white/20" />
                                         </div>
-                                        <CheckCircle2 className="w-6 h-6 text-white/20" />
-                                    </div>
-                                    <h3 className="text-2xl font-bold mb-4 text-white">
-                                        {item.title}
-                                    </h3>
-                                    <p className="text-white/60 leading-relaxed font-light break-keep">
-                                        {item.description}
-                                    </p>
-                                </motion.div>
-                            ))}
+                                        <h3 className="text-2xl font-bold mb-4 text-white">
+                                            {item.title}
+                                        </h3>
+                                        <p className="text-white/60 leading-relaxed font-light break-keep">
+                                            {item.description}
+                                        </p>
+                                    </motion.div>
+                                );
+                            })}
                         </div>
                     </div>
                 </div>

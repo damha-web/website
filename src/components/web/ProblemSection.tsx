@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
-import { MonitorX, Users, Settings } from "lucide-react";
+import { MonitorX, Unlink, Wrench } from "lucide-react";
 
 const PROBLEMS = [
     {
@@ -14,13 +14,13 @@ const PROBLEMS = [
         number: "02",
         title: "환자 기대와 서비스 간 격차",
         description: "빠른 정보, 간편 예약, 신뢰감 미충족으로 포털 의존 심화",
-        icon: Users,
+        icon: Unlink,
     },
     {
         number: "03",
         title: "운영의 불편함",
         description: "기능이 있어도 관리가 어려우면 결국 방치되는 홈페이지",
-        icon: Settings,
+        icon: Wrench,
     },
 ];
 

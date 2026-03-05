@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { TextReveal } from "@/components/ui/text-reveal";
 import { MagneticWrapper } from "@/components/ui/magnetic-wrapper";
-import { ArrowRight, Users, Target, BarChart3, Handshake, ClipboardList, CheckCircle2, ChevronRight, Eye, Search, CalendarCheck, Award, ShieldCheck, FlaskConical, Building2, Hospital, Leaf, Heart, Smile, Stethoscope } from "lucide-react";
+import { ArrowRight, Users, Target, BarChart3, Handshake, ClipboardList, CheckCircle2, ChevronRight, Eye, Search, CalendarCheck, Award, ShieldCheck, FlaskConical, Building2, Hospital, Leaf, Heart, Smile, Stethoscope, BriefcaseMedical, ThumbsUp, Medal } from "lucide-react";
 import { COMPANY } from "@/data/company";
 import { getClientSummary, STATS } from "@/data/stats";
 import { CERTIFICATIONS, CLIENT_CATEGORIES } from "@/data/clients";
@@ -99,9 +99,9 @@ const MOT_STAGES = [
     { title: "인지", icon: <Eye className="w-6 h-6" />, desc: "검색, 배너, SNS 등을 통한 브랜드 첫인상 형성", channels: "구글 영상광고, 당근 배너, 버스/택배 오프라인" },
     { title: "탐색", icon: <Search className="w-6 h-6" />, desc: "블로그, 카페, 랜딩페이지에서 정보 및 신뢰 탐색", channels: "브랜드 블로그, 노출형 블로그, 네이버 카페" },
     { title: "예약 및 방문", icon: <CalendarCheck className="w-6 h-6" />, desc: "카카오채널, 전화 등 원활하고 체계적인 접점", channels: "인콜/아웃콜, 채팅문의, 사전예약 안내" },
-    { title: "진료 및 상담", icon: <Users className="w-6 h-6" />, desc: "내원 후 환대, 전문적이고 투명한 상담/진료 경험", channels: "원내 시스템, 직원 응대 코칭, 상담팀 메뉴얼" },
+    { title: "진료 및 상담", icon: <Stethoscope className="w-6 h-6" />, desc: "내원 후 환대, 전문적이고 투명한 상담/진료 경험", channels: "원내 시스템, 직원 응대 코칭, 상담팀 메뉴얼" },
     { title: "진료 후 관리", icon: <ClipboardList className="w-6 h-6" />, desc: "주의사항 안내, 회복 체크 등 긍정적 기억 강화", channels: "리콜/리마인드 문자, 회복 정보 제공 시스템" },
-    { title: "리뷰 및 추천", icon: <CheckCircle2 className="w-6 h-6" />, desc: "충성고객화 및 지인 추천을 유도하는 사후 솔루션", channels: "긍정 후기 유도, 부정 이슈 데일리 피드백" }
+    { title: "리뷰 및 추천", icon: <ThumbsUp className="w-6 h-6" />, desc: "충성고객화 및 지인 추천을 유도하는 사후 솔루션", channels: "긍정 후기 유도, 부정 이슈 데일리 피드백" }
 ];
 
 const CEO_PROFILE = [
@@ -124,7 +124,7 @@ const TEAM_STRENGTH = [
 const VALUES = [
     { icon: <Target className="w-10 h-10 text-[#D60000]" />, title: "본질 지향 전략", description: "단기 성과에 집착하지 않고 병원의 고유한 브랜드 가치 발굴과 지속적 성장을 추구합니다." },
     { icon: <BarChart3 className="w-10 h-10 text-[#D60000]" />, title: "데이터 기반 실행", description: "치밀한 데이터 분석을 바탕으로, 근거 있는 전략과 측정 가능한 결과를 증명합니다." },
-    { icon: <Users className="w-10 h-10 text-[#D60000]" />, title: "현장 중심 사고", description: "병원 현장에서 경험을 쌓은 전문가들이 환자와 의료진 모두를 이해하는 언어를 씁니다." },
+    { icon: <BriefcaseMedical className="w-10 h-10 text-[#D60000]" />, title: "현장 중심 사고", description: "병원 현장에서 경험을 쌓은 전문가들이 환자와 의료진 모두를 이해하는 언어를 씁니다." },
     { icon: <Handshake className="w-10 h-10 text-[#D60000]" />, title: "파트너십 신뢰", description: "95% 이상의 압도적인 수치가 말해주는, 한번 맺은 인연을 소중히 여기는 파트너십." }
 ];
 
@@ -462,7 +462,7 @@ export default function AboutPage() {
                             const icons = [
                                 <Award key="award" className="w-8 h-8 text-[#D60000]" />,
                                 <ShieldCheck key="shield1" className="w-8 h-8 text-[#D60000]" />,
-                                <ShieldCheck key="shield2" className="w-8 h-8 text-[#D60000]" />,
+                                <Medal key="medal" className="w-8 h-8 text-[#D60000]" />,
                                 <FlaskConical key="flask" className="w-8 h-8 text-[#D60000]" />
                             ];
                             return (
@@ -600,89 +600,89 @@ export default function AboutPage() {
                                             transform: idx % 2 === 0 ? 'translateY(0)' : 'translateY(20px)'
                                         }}
                                     >
-                                    {/* Journey connectors - Desktop only */}
-                                    {/* Card 1, 2: Right arrow */}
-                                    {(idx === 0 || idx === 1) && (
-                                        <motion.div
-                                            className="hidden lg:block absolute top-1/2 -right-6 -translate-y-1/2"
-                                            initial={{ opacity: 0, x: -10 }}
-                                            whileInView={{ opacity: 1, x: 0 }}
-                                            viewport={{ once: false }}
-                                            transition={{ delay: idx * 0.15 + 0.8, duration: 0.5 }}
-                                        >
-                                            <div className="flex items-center gap-1">
-                                                <div className="w-8 h-0.5 bg-gradient-to-r from-[#D60000]/60 to-[#D60000]/20"></div>
-                                                <ChevronRight className="w-6 h-6 text-[#D60000]" strokeWidth={2.5} />
-                                            </div>
-                                        </motion.div>
-                                    )}
+                                        {/* Journey connectors - Desktop only */}
+                                        {/* Card 1, 2: Right arrow */}
+                                        {(idx === 0 || idx === 1) && (
+                                            <motion.div
+                                                className="hidden lg:block absolute top-1/2 -right-6 -translate-y-1/2"
+                                                initial={{ opacity: 0, x: -10 }}
+                                                whileInView={{ opacity: 1, x: 0 }}
+                                                viewport={{ once: false }}
+                                                transition={{ delay: idx * 0.15 + 0.8, duration: 0.5 }}
+                                            >
+                                                <div className="flex items-center gap-1">
+                                                    <div className="w-8 h-0.5 bg-gradient-to-r from-[#D60000]/60 to-[#D60000]/20"></div>
+                                                    <ChevronRight className="w-6 h-6 text-[#D60000]" strokeWidth={2.5} />
+                                                </div>
+                                            </motion.div>
+                                        )}
 
-                                    {/* Card 3: Down arrow */}
-                                    {idx === 2 && (
-                                        <motion.div
-                                            className="hidden lg:block absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-6"
-                                            initial={{ opacity: 0, y: -10 }}
-                                            whileInView={{ opacity: 1, y: 0 }}
-                                            viewport={{ once: false }}
-                                            transition={{ delay: 1, duration: 0.5 }}
-                                        >
-                                            <div className="flex flex-col items-center gap-1">
-                                                <div className="w-0.5 h-8 bg-gradient-to-b from-[#D60000]/60 to-[#D60000]/20"></div>
-                                                <ChevronRight className="w-6 h-6 text-[#D60000] rotate-90" strokeWidth={2.5} />
-                                            </div>
-                                        </motion.div>
-                                    )}
+                                        {/* Card 3: Down arrow */}
+                                        {idx === 2 && (
+                                            <motion.div
+                                                className="hidden lg:block absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-6"
+                                                initial={{ opacity: 0, y: -10 }}
+                                                whileInView={{ opacity: 1, y: 0 }}
+                                                viewport={{ once: false }}
+                                                transition={{ delay: 1, duration: 0.5 }}
+                                            >
+                                                <div className="flex flex-col items-center gap-1">
+                                                    <div className="w-0.5 h-8 bg-gradient-to-b from-[#D60000]/60 to-[#D60000]/20"></div>
+                                                    <ChevronRight className="w-6 h-6 text-[#D60000] rotate-90" strokeWidth={2.5} />
+                                                </div>
+                                            </motion.div>
+                                        )}
 
-                                    {/* Card 4, 5: Left arrow */}
-                                    {(idx === 3 || idx === 4) && (
-                                        <motion.div
-                                            className="hidden lg:block absolute top-1/2 -left-6 -translate-y-1/2"
-                                            initial={{ opacity: 0, x: 10 }}
-                                            whileInView={{ opacity: 1, x: 0 }}
-                                            viewport={{ once: false }}
-                                            transition={{ delay: idx * 0.15 + 0.8, duration: 0.5 }}
-                                        >
-                                            <div className="flex items-center gap-1">
-                                                <ChevronRight className="w-6 h-6 text-[#D60000] rotate-180" strokeWidth={2.5} />
-                                                <div className="w-8 h-0.5 bg-gradient-to-l from-[#D60000]/60 to-[#D60000]/20"></div>
-                                            </div>
-                                        </motion.div>
-                                    )}
+                                        {/* Card 4, 5: Left arrow */}
+                                        {(idx === 3 || idx === 4) && (
+                                            <motion.div
+                                                className="hidden lg:block absolute top-1/2 -left-6 -translate-y-1/2"
+                                                initial={{ opacity: 0, x: 10 }}
+                                                whileInView={{ opacity: 1, x: 0 }}
+                                                viewport={{ once: false }}
+                                                transition={{ delay: idx * 0.15 + 0.8, duration: 0.5 }}
+                                            >
+                                                <div className="flex items-center gap-1">
+                                                    <ChevronRight className="w-6 h-6 text-[#D60000] rotate-180" strokeWidth={2.5} />
+                                                    <div className="w-8 h-0.5 bg-gradient-to-l from-[#D60000]/60 to-[#D60000]/20"></div>
+                                                </div>
+                                            </motion.div>
+                                        )}
 
-                                    {/* Progress indicator */}
-                                    <motion.div
-                                        className="absolute -top-3 -left-3 w-12 h-12 rounded-full bg-gradient-to-br from-[#D60000] to-[#FF4444] flex items-center justify-center font-black text-white shadow-lg"
-                                        initial={{ scale: 0, rotate: -180 }}
-                                        whileInView={{ scale: 1, rotate: 0 }}
-                                        viewport={{ once: false }}
-                                        transition={{ delay: idx * 0.15 + 0.3, type: "spring", stiffness: 200 }}
-                                    >
-                                        {idx + 1}
+                                        {/* Progress indicator */}
+                                        <motion.div
+                                            className="absolute -top-3 -left-3 w-12 h-12 rounded-full bg-gradient-to-br from-[#D60000] to-[#FF4444] flex items-center justify-center font-black text-white shadow-lg"
+                                            initial={{ scale: 0, rotate: -180 }}
+                                            whileInView={{ scale: 1, rotate: 0 }}
+                                            viewport={{ once: false }}
+                                            transition={{ delay: idx * 0.15 + 0.3, type: "spring", stiffness: 200 }}
+                                        >
+                                            {idx + 1}
+                                        </motion.div>
+
+                                        {/* Stage number watermark */}
+                                        <div className="absolute top-6 right-6 text-5xl font-black text-gray-100 group-hover:text-white/5 transition-colors pointer-events-none">
+                                            0{idx + 1}
+                                        </div>
+
+                                        {/* Icon */}
+                                        <div className="w-14 h-14 bg-gray-50 shadow-md rounded-xl flex items-center justify-center mb-6 text-[#D60000] group-hover:bg-[#D60000] group-hover:text-white transition-colors relative z-10">
+                                            {stage.icon}
+                                        </div>
+
+                                        <h3 className="text-3xl font-bold mb-4 relative z-10">{stage.title}</h3>
+                                        <p className="text-base text-gray-500 group-hover:text-gray-300 mb-6 font-light leading-relaxed relative z-10">
+                                            {stage.desc}
+                                        </p>
+
+                                        <div className="pt-4 border-t border-gray-200 group-hover:border-gray-700 relative z-10">
+                                            <span className="block text-sm font-bold text-[#D60000] uppercase tracking-wider mb-2">Key Channels</span>
+                                            <p className="text-base font-medium text-gray-600 group-hover:text-gray-300">{stage.channels}</p>
+                                        </div>
+
+                                        {/* Hover glow effect */}
+                                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#D60000]/0 to-[#D60000]/0 group-hover:from-[#D60000]/10 group-hover:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                                     </motion.div>
-
-                                    {/* Stage number watermark */}
-                                    <div className="absolute top-6 right-6 text-5xl font-black text-gray-100 group-hover:text-white/5 transition-colors pointer-events-none">
-                                        0{idx + 1}
-                                    </div>
-
-                                    {/* Icon */}
-                                    <div className="w-14 h-14 bg-gray-50 shadow-md rounded-xl flex items-center justify-center mb-6 text-[#D60000] group-hover:bg-[#D60000] group-hover:text-white transition-colors relative z-10">
-                                        {stage.icon}
-                                    </div>
-
-                                    <h3 className="text-3xl font-bold mb-4 relative z-10">{stage.title}</h3>
-                                    <p className="text-base text-gray-500 group-hover:text-gray-300 mb-6 font-light leading-relaxed relative z-10">
-                                        {stage.desc}
-                                    </p>
-
-                                    <div className="pt-4 border-t border-gray-200 group-hover:border-gray-700 relative z-10">
-                                        <span className="block text-sm font-bold text-[#D60000] uppercase tracking-wider mb-2">Key Channels</span>
-                                        <p className="text-base font-medium text-gray-600 group-hover:text-gray-300">{stage.channels}</p>
-                                    </div>
-
-                                    {/* Hover glow effect */}
-                                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#D60000]/0 to-[#D60000]/0 group-hover:from-[#D60000]/10 group-hover:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                                </motion.div>
                                 );
                             })}
                         </div>
