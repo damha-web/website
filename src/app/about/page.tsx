@@ -19,10 +19,7 @@ const COMPANY_INFO = {
     clients: getClientSummary()
 };
 
-const ORG_AFFILIATES = [
-    "㈜ 담하손해사정",
-    "㈜ 담하소개팅"
-];
+
 
 const ORG_STAFF = [
     { name: "경영기획실", desc: "전사 리스크 관리 및 중장기 비전 수립" },
@@ -57,16 +54,29 @@ const ORG_DEPARTMENTS = [
         ]
     },
     {
-        en: "Brand Strategy",
-        name: "브랜드전략부",
+        en: "Media Content",
+        name: "미디어컨텐츠기획팀",
         color: "#8B5CF6",
-        teams: ["광고컨텐츠기획팀", "퍼포먼스광고팀", "미디어제작운영팀"],
+        teams: [],
         services: [
-            "Brand communication strategy",
-            "Brand identity design",
-            "Brand guides",
-            "Digital branding",
-            "Rebranding"
+            "Video production",
+            "Content strategy",
+            "Visual design",
+            "Social content",
+            "Photography"
+        ]
+    },
+    {
+        en: "Planning & Admin",
+        name: "기획관리팀",
+        color: "#10B981",
+        teams: [],
+        services: [
+            "Business planning",
+            "HR & Admin",
+            "Finance & Accounting",
+            "Operations",
+            "Risk management"
         ]
     }
 ];
@@ -248,23 +258,7 @@ export default function AboutPage() {
                                 대표이사
                                 <div className="text-sm font-normal text-white/80 mt-1">주식회사 담하</div>
                             </div>
-                            {/* Affiliates connector */}
-                            <div className="absolute -right-52 top-1/2 -translate-y-1/2 flex flex-col gap-2">
-                                <div className="absolute -left-16 top-1/2 -translate-y-1/2 w-16 h-[1px] bg-white/20"></div>
-                                {ORG_AFFILIATES.map((a, i) => (
-                                    <motion.div
-                                        key={i}
-                                        initial={{ opacity: 0, x: 20 }}
-                                        whileInView={{ opacity: 1, x: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ delay: 0.2 + i * 0.1 }}
-                                        className="px-4 py-2 rounded-lg text-sm font-bold text-white/60 text-center whitespace-nowrap"
-                                        style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
-                                    >
-                                        {a}
-                                    </motion.div>
-                                ))}
-                            </div>
+
                         </motion.div>
 
                         {/* Vertical stem */}
@@ -294,9 +288,9 @@ export default function AboutPage() {
                         <div className="w-[1px] h-10" style={{ background: 'rgba(255,255,255,0.15)' }}></div>
 
                         {/* Department row header */}
-                        <div className="w-full max-w-4xl relative">
-                            <div className="absolute inset-x-[16.6%] top-0 h-[1px] bg-white/15"></div>
-                            <div className="grid grid-cols-3 gap-6 pt-8">
+                        <div className="w-full max-w-6xl relative px-4">
+                            <div className="hidden md:block absolute inset-x-[12.5%] top-0 h-[1px] bg-white/15"></div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pt-8">
                                 {ORG_DEPARTMENTS.map((dept, idx) => (
                                     <motion.div
                                         key={idx}
