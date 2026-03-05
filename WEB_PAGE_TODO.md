@@ -1,20 +1,21 @@
 # 웹제작부 페이지 (/web) — 작업 현황
 
 > 최종 업데이트: 2026.03.04
-> 완료된 기반 작업: 와이어프레임 설계, 섹션 컴포넌트 9개, 데이터 4개, 이미지 27장, 빌드 통과
+> 완료된 기반 작업: 와이어프레임 설계, 섹션 컴포넌트 12개, 데이터 4개, 이미지 57장(썸네일15+상세30+CMS12), 빌드 통과
 
 ---
 
 ## 우선순위 1: 콘텐츠/기능 보강
 
-- [x] **1-1. Hero 3D 캐러셀 리디자인** ✅
+- [x] **1-1. Hero ImageTrail 리디자인** ✅
   - ~~기존: 포트폴리오 이미지 6장 크로스페이드 슬라이드~~
-  - **변경: 3D 회전 카드 캐러셀 + 2컬럼 레이아웃**
-  - 포트폴리오 이미지 8장이 원형 궤도 자동 회전, 마우스 추적 3D perspective
-  - 좌측 텍스트(배지+헤딩+CTA) + 우측 캐러셀 (모바일: 캐러셀 위 + 텍스트 아래)
+  - ~~중간: 3D 회전 카드 캐러셀 + 2컬럼 레이아웃~~
+  - **최종: ImageTrail 마우스 트레일 효과 + 중앙 텍스트 레이아웃**
+  - ImageTrail을 전체 화면 배경(z-0)으로 배치, 포트폴리오 이미지 마우스 추적 트레일
+  - 콘텐츠 중앙 정렬(z-10): "WEB INNOVATION" 그라데이션 헤딩 + CTA
   - 하단 features 3컬럼 카드 (브랜드 특화 디자인 / 빠른 제작 / CMS 관리)
-  - 카드 호버 시 scale 확대 + shine 그라데이션 효과
-  - `cn()` 유틸 활용 (`src/lib/utils.ts`)
+  - 관련 파일: `src/components/ui/image-trail.tsx`, `src/components/hooks/use-mouse-vector.ts`
+  - 의존성: `uuid` v13.0.0
   - 파일: `src/components/web/WebHero.tsx`
 
 - [x] **1-2. Contact 폼 백엔드 연동** ✅
@@ -98,13 +99,14 @@
 ### 컴포넌트 (src/components/web/)
 - `WebHero.tsx`, `ProblemSection.tsx`, `WebAboutSection.tsx`
 - `DifferenceSection.tsx`, `ServicePricing.tsx`, `CMSShowcase.tsx`
-- `WebPortfolioGrid.tsx`, `ProcessTimeline.tsx`, `ContactForm.tsx`
+- `WebPortfolioGrid.tsx`, `PortfolioModal.tsx`, `ProcessTimeline.tsx`, `ContactForm.tsx`
 
 ### 데이터 (src/data/)
 - `web-products.ts`, `web-portfolio.ts`, `cms-features.ts`, `process-steps.ts`
 
 ### 이미지
-- `public/assets/images/portfolio/` (15장)
+- `public/assets/images/portfolio/` (15장 썸네일)
+- `public/assets/images/portfolio/detail/` (30장 PC/Mobile 상세)
 - `public/assets/images/cms/` (12장)
 
 ### 신규 생성 파일
@@ -112,12 +114,22 @@
 - `src/components/web/WebFabCTA.tsx` — 플로팅 CTA
 - `src/app/api/web-contact/route.ts` — Contact API
 
+### UI / Hook
+- `src/components/ui/image-trail.tsx` — ImageTrail 마우스 트레일 효과
+- `src/components/hooks/use-mouse-vector.ts` — 마우스/터치 위치 추적 훅
+
+### 스크립트
+- `scripts/capture-portfolio.mjs` — Playwright 포트폴리오 캡처 (15개 사이트)
+- `scripts/capture-failed.mjs` — SSL 에러 5개 사이트 재캡처
+- `scripts/crop-images.mjs` — Sharp 이미지 크롭
+
 ### 기획/설계 문서
 - `담하_웹제작부_포트폴리오사이트_콘텐츠기획안.md`
 - `plan.md` (와이어프레임)
 - `research.md` (리서치)
 - `IMAGE_PLAN.md` (이미지 배치 계획)
-- `scripts/crop-images.mjs` (이미지 크롭 스크립트)
+- `inspection-report.md` (전체 점검 결과)
+- `remaining-plan.md` (남은 작업 계획)
 
 ---
 
@@ -130,7 +142,7 @@
 | 포트폴리오 모달 PC/Mobile 뷰어 | OK | `detail/{id}-pc.jpg`, `detail/{id}-mobile.jpg` 경로, `onError` 폴백 |
 | 포트폴리오 캡처 이미지 | OK | 15개 전체 완료 (30장). `ignoreHTTPSErrors` + `domcontentloaded` 적용으로 미캡처 5개 해결. |
 | 타입 체크 | OK | `tsc --noEmit` 에러 없음 |
-| Hero 3D 캐러셀 리디자인 | OK | 3D 회전 카드 캐러셀 + 2컬럼 레이아웃 + features 3컬럼. 타입 체크 통과. |
+| Hero ImageTrail 리디자인 | OK | ImageTrail 마우스 트레일 배경 + 중앙 텍스트 + features 3컬럼. 타입 체크 통과. |
 
 ---
 

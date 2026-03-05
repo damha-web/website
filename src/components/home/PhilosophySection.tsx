@@ -1,14 +1,7 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
-import { TextReveal } from "@/components/ui/text-reveal";
-import { customFadeInUp } from "@/lib/animation-variants";
-
-/**
- * Fixed Parallax Section - "Why Damha Works"
- * ThinkCreative 스타일 Split Layout with Sticky Image
- */
+import { useState, useCallback, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const PHILOSOPHY_CONTENT = [
     {
@@ -35,115 +28,132 @@ const PHILOSOPHY_CONTENT = [
 ];
 
 export default function PhilosophySection() {
-    const sectionRef = useRef<HTMLElement>(null);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [isMobile, setIsMobile] = useState(false);
 
-    const { scrollYProgress } = useScroll({
-        target: sectionRef,
-        offset: ["start start", "end end"]
-    });
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < 1024);
+        check();
+        window.addEventListener("resize", check);
+        return () => window.removeEventListener("resize", check);
+    }, []);
 
-    // Image effects based on scroll
-    const imageOpacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]);
-    const imageScale = useTransform(scrollYProgress, [0, 0.2], [0.8, 1]);
+    const handleHover = useCallback((index: number) => {
+        if (!isMobile) setActiveIndex(index);
+    }, [isMobile]);
+
+    const handleClick = useCallback((index: number) => {
+        if (isMobile) {
+            setActiveIndex(prev => prev === index ? -1 : index);
+        }
+    }, [isMobile]);
 
     return (
-        <section
-            ref={sectionRef}
-            className="relative bg-surface-light"
-        >
-            {/* Fixed Background Image 영역 */}
-            <div
-                className="absolute inset-0 w-full h-full"
-                style={{
-                    backgroundImage: "url('/assets/images/damha_mesh_decor.png')",
-                    backgroundAttachment: "fixed",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    opacity: 0.3 // 투명도 설정 (필요시 조절 가능)
-                }}
-            />
+        <section className="relative bg-secondary overflow-hidden">
+            <div className="flex flex-col lg:flex-row min-h-[600px] lg:min-h-screen">
 
-            <div className="container mx-auto px-6 relative z-10">
-                <div className="flex flex-col lg:flex-row gap-16 lg:gap-32">
-                    {/* Left: Sticky Image Container (Narrower for better balance) */}
-                    <div className="w-full lg:w-[35%] lg:sticky lg:top-0 lg:h-screen flex items-center">
-                        <motion.div
-                            style={{
-                                opacity: imageOpacity,
-                                scale: imageScale,
-                            }}
-                            className="w-full relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl"
-                        >
-                            <img
-                                src="/assets/images/code.jpg"
-                                alt="Damha Philosophy"
-                                className="w-full h-full object-cover"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-tr from-secondary/60 via-transparent to-primary/20" />
+                {/* Left: Full Image */}
+                <motion.div
+                    className="relative w-full lg:w-1/2 h-[40vh] lg:h-auto"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                >
+                    <img
+                        src="/assets/images/code.jpg"
+                        alt="Damha Philosophy"
+                        className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    {/* Dark gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-secondary/70 via-secondary/40 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-secondary/60 via-transparent to-transparent" />
 
-                            {/* Floating Quote */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.5 }}
-                                className="absolute bottom-8 left-8 right-8 bg-white/95 backdrop-blur-sm p-6 rounded-2xl shadow-lg"
-                            >
-                                <p className="text-sm text-text-sub mb-2 font-medium">담하의 신념</p>
-                                <p className="text-lg font-bold text-secondary leading-snug">
-                                    &quot;현장을 모르는 마케팅은&quot;<br />&quot;전술일 뿐 전략이 될 수 없다&quot;
-                                </p>
-                            </motion.div>
-                        </motion.div>
-                    </div>
-
-                    {/* Right: Scrolling Content (Wider for readability) */}
-                    <div className="w-full lg:w-[65%] py-24 lg:py-60">
-                        {/* Header Part */}
-                        <div className="mb-60 lg:mb-[80vh]">
-                            <span className="text-primary font-bold tracking-widest text-sm font-montserrat uppercase mb-4 block">
-                                Why Damha Works
-                            </span>
-                            <h2 className="text-5xl md:text-7xl font-black text-secondary mb-8 leading-[1.1] tracking-tight">
-                                <TextReveal text="담하가 만드는" />
-                                <br />
-                                <span className="text-primary"><TextReveal text="결정적 차이" /></span>
-                            </h2>
-                            <p className="text-xl md:text-2xl text-text-sub leading-relaxed max-w-2xl break-keep">
-                                우리는 단순한 마케팅 대행사가 아닙니다.<br />
-                                현장의 언어를 마케팅으로 번역하는 브랜드 파트너입니다.
+                    {/* Quote overlay */}
+                    <div className="absolute bottom-8 left-8 right-8 lg:bottom-16 lg:left-16 lg:right-16">
+                        <p className="text-white/50 text-xs tracking-[0.2em] font-montserrat uppercase mb-3">
+                            Why Damha Works
+                        </p>
+                        <h2 className="text-3xl lg:text-5xl font-bold text-white leading-tight tracking-tight mb-6 break-keep">
+                            담하가 만드는<br />
+                            <span className="text-primary">결정적 차이</span>
+                        </h2>
+                        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-5 lg:p-6 max-w-md">
+                            <p className="text-white/90 text-base lg:text-lg font-medium leading-relaxed italic">
+                                &ldquo;현장을 모르는 마케팅은<br />
+                                전술일 뿐 전략이 될 수 없다&rdquo;
                             </p>
                         </div>
+                    </div>
+                </motion.div>
 
-                        {/* Content Parts - significantly spaced out */}
-                        <div className="space-y-[60vh] pb-[20vh]">
-                            {PHILOSOPHY_CONTENT.map((item) => (
-                                <motion.div
+                {/* Right: Accordion */}
+                <div className="w-full lg:w-1/2 flex flex-col justify-center bg-white px-6 py-12 lg:px-16 lg:py-20">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                    >
+                        <p className="text-text-sub text-base lg:text-lg leading-relaxed mb-10 max-w-lg break-keep">
+                            우리는 단순한 마케팅 대행사가 아닙니다.<br />
+                            현장의 언어를 마케팅으로 번역하는 브랜드 파트너입니다.
+                        </p>
+
+                        {/* Accordion Items */}
+                        <div className="border-t border-gray-200">
+                            {PHILOSOPHY_CONTENT.map((item, index) => (
+                                <div
                                     key={item.id}
-                                    initial="hidden"
-                                    whileInView="visible"
-                                    viewport={{ once: false, margin: "-10% 0px -20% 0px" }}
-                                    variants={customFadeInUp(0.8)}
-                                    className="bg-white rounded-4xl p-10 lg:p-16 shadow-lg border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 relative max-w-2xl"
+                                    className="border-b border-gray-200"
+                                    onMouseEnter={() => handleHover(index)}
+                                    onClick={() => handleClick(index)}
                                 >
-                                    <span className="inline-block text-primary font-bold text-sm tracking-widest uppercase mb-6 font-montserrat">
-                                        Step 0{item.id} — {item.subtitle}
-                                    </span>
-                                    <h3 className="text-4xl md:text-5xl font-bold text-secondary mb-8 whitespace-pre-line leading-tight tracking-tight">
-                                        {item.title}
-                                    </h3>
-                                    <p className="text-xl text-text-sub leading-relaxed mb-10 break-keep">
-                                        {item.description}
-                                    </p>
-                                    <div className="pt-8 border-t border-gray-100">
-                                        <p className="text-lg font-bold text-primary font-montserrat flex items-center gap-3">
-                                            <span className="w-10 h-px bg-primary"></span>
-                                            {item.stats}
-                                        </p>
+                                    {/* Header */}
+                                    <div className={`flex items-start gap-5 py-6 lg:py-7 cursor-pointer transition-colors duration-300 ${activeIndex === index ? 'text-secondary' : 'text-gray-400 hover:text-secondary'}`}>
+                                        <span className="text-sm font-montserrat font-bold mt-1 shrink-0">
+                                            {String(item.id).padStart(2, '0')}
+                                        </span>
+                                        <div className="flex-1 min-w-0">
+                                            <h3 className="text-lg lg:text-xl font-bold leading-snug break-keep">
+                                                {item.title.replace('\n', ' ')}
+                                            </h3>
+
+                                            {/* Expandable content */}
+                                            <AnimatePresence initial={false}>
+                                                {activeIndex === index && (
+                                                    <motion.div
+                                                        initial={{ height: 0, opacity: 0 }}
+                                                        animate={{ height: "auto", opacity: 1 }}
+                                                        exit={{ height: 0, opacity: 0 }}
+                                                        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                                                        className="overflow-hidden"
+                                                    >
+                                                        <p className="text-text-sub text-sm lg:text-base leading-relaxed mt-3 break-keep">
+                                                            {item.description}
+                                                        </p>
+                                                        <p className="text-primary text-sm font-bold mt-3 flex items-center gap-2">
+                                                            <span className="w-6 h-px bg-primary" />
+                                                            {item.stats}
+                                                        </p>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </div>
+
+                                        {/* Toggle indicator */}
+                                        <motion.span
+                                            className="text-lg mt-0.5 shrink-0 select-none"
+                                            animate={{ rotate: activeIndex === index ? 45 : 0 }}
+                                            transition={{ duration: 0.2 }}
+                                        >
+                                            +
+                                        </motion.span>
                                     </div>
-                                </motion.div>
+                                </div>
                             ))}
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
             </div>
         </section>
