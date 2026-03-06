@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { FEATURED_CLIENTS } from "@/data/clients";
+import { CLIENT_LOGOS } from "@/data/clients";
 import { ClientIconCloud } from "@/components/ui/client-icon-cloud";
 
 export default function PortfolioPreview() {
@@ -79,7 +79,7 @@ export default function PortfolioPreview() {
                     >
                         {/* 더 넓은 영역을 가지도록 컨테이너 추가 */}
                         <div className="w-full max-w-[600px] aspect-square rounded-[3rem] bg-gradient-to-b from-gray-50/50 to-white flex items-center justify-center">
-                            <ClientIconCloud clients={FEATURED_CLIENTS} />
+                            <ClientIconCloud logos={CLIENT_LOGOS} />
                         </div>
                     </motion.div>
 

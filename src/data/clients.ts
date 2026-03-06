@@ -13,25 +13,17 @@ export const CLIENT_CATEGORIES: ClientCategory[] = [
     { category: "의원·한의원·치과의원", count: 95, suffix: "+" },
 ];
 
-export const FEATURED_CLIENTS = [
-    // 제공해주신 순서 및 그루핑 기반
-    "일신기독병원", "거인병원", "당당한방병원창원점", "스마트나라 요양병원", "라온치과병원",
-    "핑이비인후과", "김상호 신경과(이비인후과)", "신세계이비인후과", "숨플러스이비인후과",
-    "김병준레다스흉부외과", "선샤인피부과", "수영센텀피부과", "청담에이스의원", "예바치과",
+export interface ClientLogo {
+    id: number;
+    name: string;
+    imagePath: string;
+}
 
-    "구포성심병원", "광안자모병원", "신세계한방병원", "풍경요양병원", "램브란트치과병원",
-
-    "센텀종합병원", "대구삼육오엠씨병원", "연산당당한방병원", "해뜨락요양병원",
-
-    "해동병원", "대구우리들병원", "삼세한방병원", "중앙나라요양병원", "온치과병원 진해",
-
-    "더탄탄병원", "태흥당한방병원 정관", "부산나라요양병원",
-
-    "동래우리들병원", "드림나라병원", "베테랑병원", "부산본병원", "부산365mc병원",
-    "새봄병원", "새우리남산병원", "웰하이여성아동병원", "부산우리들병원", "큰힘병원",
-    "해운대푸른바다어린이병원", "화명일신기독병원", "정관일신기독병원", "맥켄지일신재활병원",
-    "힘나는병원"
-];
+export const CLIENT_LOGOS: ClientLogo[] = Array.from({ length: 19 }, (_, i) => ({
+    id: i + 1,
+    name: `Client ${i + 1}`,
+    imagePath: `/assets/images/client/client-${String(i + 1).padStart(2, "0")}.webp`
+}));
 
 export const CERTIFICATIONS = [
     {

@@ -2,7 +2,7 @@
 
 import React, { useMemo } from "react";
 import { Cloud, ICloud } from "react-icon-cloud";
-import { Building2, Plus, ArrowUpRight } from "lucide-react";
+import { ClientLogo } from "@/data/clients";
 
 export const cloudProps: Omit<ICloud, "children"> = {
     containerProps: {
@@ -18,7 +18,7 @@ export const cloudProps: Omit<ICloud, "children"> = {
         reverse: true,
         depth: 1,
         wheelZoom: false,
-        imageScale: 2,
+        imageScale: 1, // 2 -> 1로 축소
         activeCursor: "default",
         tooltip: "native",
         initial: [0.1, -0.1],
@@ -28,17 +28,15 @@ export const cloudProps: Omit<ICloud, "children"> = {
         maxSpeed: 0.02, // 기존 0.04에서 감소
         minSpeed: 0.01, // 기존 0.02에서 감소
         frontSelect: true,
-        textFont: "var(--font-pretendard), sans-serif",
-        textColour: "#4b5563", // 진한 회색으로 통일
         weight: true,
     },
 };
 
 export type ClientIconCloudProps = {
-    clients: string[];
+    logos: ClientLogo[];
 };
 
-export function ClientIconCloud({ clients }: ClientIconCloudProps) {
+export function ClientIconCloud({ logos }: ClientIconCloudProps) {
     const [mounted, setMounted] = React.useState(false);
 
     React.useEffect(() => {
@@ -46,43 +44,39 @@ export function ClientIconCloud({ clients }: ClientIconCloudProps) {
     }, []);
 
     const renderedNodes = useMemo(() => {
-        return clients.map((client, index) => {
-            // Alternating icons for variety
-            const Icon = index % 3 === 0 ? Plus : index % 3 === 1 ? Building2 : ArrowUpRight;
-
+        return logos.map((logo) => {
             return (
                 <a
-                    key={index}
+                    key={logo.id}
                     href="#"
                     role="presentation"
-                    aria-label={client}
+                    aria-label={logo.name}
                     onClick={(e) => e.preventDefault()}
                     style={{
-                        display: "flex",
+                        display: "flex", // important for vertically centering within the canvas
                         alignItems: "center",
-                        gap: "8px",
-                        padding: "8px 16px",
-                        borderRadius: "9999px",
-                        backgroundColor: "rgba(0,0,0,0.05)",
-                        backdropFilter: "blur(8px)",
-                        border: "1px solid rgba(0,0,0,0.1)",
-                        color: "#4b5563",
-                        fontWeight: "bold",
-                        fontSize: "16px",
-                        textDecoration: "none",
-                        cursor: "default",
+                        justifyContent: "center",
                     }}
-                    className="hover:scale-110 hover:border-primary hover:text-primary transition-all duration-300"
+                    className="hover:scale-110 transition-transform duration-300"
                 >
-                    <Icon size={18} color="currentColor" aria-hidden="true" />
-                    <span>{client}</span>
+                    <img
+                        src={logo.imagePath}
+                        alt={logo.name}
+                        width={90}  // 캔버스 엔진이 인식할 수 있도록 명시적 속성 부여
+                        height={45}
+                        style={{ objectFit: "contain" }}
+                    />
                 </a>
             );
         });
-    }, [clients]);
+    }, [logos]);
 
     if (!mounted) {
-        return <div className="relative flex size-full items-center justify-center overflow-hidden w-full min-h-[400px]"></div>;
+        return (
+            <div className="relative flex size-full items-center justify-center overflow-hidden w-full min-h-[400px]">
+                <div className="w-48 h-48 rounded-full border-2 border-gray-100 animate-pulse" />
+            </div>
+        );
     }
 
     return (
