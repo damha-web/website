@@ -94,7 +94,7 @@ const DEPT_CAPABILITIES = [
         ko: "컨텐츠",
         icon: "C",
         color: "from-rose-500 to-pink-500",
-        items: ["Graphic design", "Video production", "Photography", "인터랙티브 컨텐츠", "브랜드 비주얼"]
+        items: ["Graphic design", "Video production", "Photography", "인터랙티브 컨텐츠", "브랜드 비주얼", "YouTube", "SNS"]
     },
     {
         en: "UX / UI",
@@ -398,7 +398,7 @@ export default function AboutPage() {
                             className="bg-white/5 backdrop-blur-md rounded-3xl p-10 border border-white/10"
                         >
                             <h2 className="text-3xl font-bold mb-2 text-white">대표이사 <span className="text-[#D60000]">약력</span></h2>
-                            <p className="text-[#D60000] font-medium mb-8">정승우 대표</p>
+                            <p className="text-[#ffffff] font-medium mb-8">정승우 대표</p>
                             <ul className="space-y-4">
                                 {CEO_PROFILE.map((item, index) => (
                                     <li key={index} className="flex items-start gap-4">

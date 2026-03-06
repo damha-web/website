@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# AI & Agents
+.gemini/
+.bkit/
+.pdca-status.json
+docs/.pdca-snapshots/
