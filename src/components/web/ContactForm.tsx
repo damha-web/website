@@ -15,6 +15,20 @@ interface FormData {
     message: string;
 }
 
+function formatMobilePhone(value: string): string {
+    const digits = value.replace(/\D/g, "").slice(0, 11);
+
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 7) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+    if (digits.length <= 10) return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+
+    return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
+}
+
+function isValidMobilePhone(value: string): boolean {
+    return /^01[0-9]-\d{3,4}-\d{4}$/.test(value);
+}
+
 export default function ContactForm() {
     const [formData, setFormData] = useState<FormData>({
         hospitalName: "",
@@ -26,11 +40,27 @@ export default function ContactForm() {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
+    const [isPhoneTouched, setIsPhoneTouched] = useState(false);
+
+    const phoneHasError =
+        isPhoneTouched && formData.phone.length > 0 && !isValidMobilePhone(formData.phone);
+
+    const handlePhoneChange = (value: string) => {
+        const formattedPhone = formatMobilePhone(value);
+        setFormData({ ...formData, phone: formattedPhone });
+    };
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        setIsLoading(true);
         setError("");
+
+        if (!isValidMobilePhone(formData.phone)) {
+            setIsPhoneTouched(true);
+            setError("연락처는 010-1234-5678 형식으로 입력해주세요.");
+            return;
+        }
+
+        setIsLoading(true);
 
         try {
             const res = await fetch("/api/web-contact", {
@@ -132,10 +162,23 @@ export default function ContactForm() {
                                             type="tel"
                                             required
                                             value={formData.phone}
-                                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                            className="w-full px-5 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-colors"
+                                            onChange={(e) => handlePhoneChange(e.target.value)}
+                                            onBlur={() => setIsPhoneTouched(true)}
+                                            inputMode="numeric"
+                                            autoComplete="tel"
+                                            maxLength={13}
+                                            className={`w-full px-5 py-3 bg-white/5 border rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:ring-1 transition-colors ${
+                                                phoneHasError
+                                                    ? "border-red-400/70 focus:border-red-400/70 focus:ring-red-400/20"
+                                                    : "border-white/10 focus:border-primary/50 focus:ring-primary/20"
+                                            }`}
                                             placeholder="010-0000-0000"
                                         />
+                                        {phoneHasError && (
+                                            <p className="mt-2 text-xs text-red-400">
+                                                휴대폰 번호 형식이 올바르지 않습니다. (예: 010-1234-5678)
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
 

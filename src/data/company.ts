@@ -9,7 +9,7 @@ export const COMPANY = {
     mobileDisplay: "010.2983.4744",
     email: "brand@damha.co.kr",
     ceo: "정승우",
-    businessNumber: "247-81-03001",
+    businessNumber: "187-88-02337",
     employees: { regular: 48, contract: 12, total: 60 },
     kakaoUrl: "https://accounts.kakao.com/login/?continue=http%3A%2F%2Fpf.kakao.com%2F_Jxldks%2Fchat#login",
 } as const;
