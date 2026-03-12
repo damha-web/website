@@ -10,7 +10,7 @@ const montserrat = Montserrat({
   subsets: ["latin"],
 });
 
-const SITE_URL = "https://website-r1cs.vercel.app";
+const SITE_URL = "https://www.damha.kr";
 
 export const metadata: Metadata = {
   title: {

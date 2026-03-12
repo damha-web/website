@@ -46,7 +46,7 @@ const jsonLd = {
     provider: {
         "@type": "Organization",
         name: "주식회사 담하",
-        url: "https://damha.co.kr",
+        url: "https://www.damha.kr",
         telephone: "051-757-0719",
         email: "web@damha.co.kr",
         address: {
