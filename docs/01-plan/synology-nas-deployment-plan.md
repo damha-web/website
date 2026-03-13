@@ -1,52 +1,55 @@
-# 담하 웹사이트 — 시놀로지 NAS 배포 계획서
+# 담하 웹사이트 — 시놀로지 NAS 배포 계획서 (리스크 분리 전략)
 
 > 작성일: 2026-03-13
 > 대상 NAS: Synology DS1821+ (AMD Ryzen V1500B, DSM 7.x)
 > NAS 로컬 접속: `coolk@192.168.0.252`
-> 목표: Vercel 상업 정책 우회 + 자체 서버 완전 통제
+> 전략: **기존 Vercel 프로덕션 완전 무중단 유지 + NAS 병행 검증 후 최종 전환**
 
 ---
 
-## 1. 기존 배포 기록 분석 (synology-nas-deployment-notes.md 기반)
-
-### 확인된 사실
-
-| 항목 | 내용 |
-|------|------|
-| NAS 로컬 IP | `192.168.0.252` |
-| SSH 사용자 | `coolk` |
-| SCP 방식 | `scp -O` (레거시 모드 필수 — Synology SFTP 프로토콜 호환 문제) |
-| Web Station | `/volume1/web/` 에서 정적 파일 서빙 중 (pricelist 프로젝트) |
-| 포트 포워딩 | 80/443 → NAS 이미 설정된 것으로 추정 (pricelist 외부 접근 가능) |
-| 이전 Docker 시도 | 컨테이너 `pricelist-web` 포트 8080 → **502 Bad Gateway** → 제거됨 |
-
-### 이전 502 실패 원인 분석
-
-**원인**: 리버스 프록시가 `192.168.0.252:8080`을 가리키는 상태에서 컨테이너(pricelist-web)가 중단되어 있었음.
-**결과**: 모든 요청이 502로 실패 → Docker 포기, Web Station 정적 방식으로 전환.
-
-### damha 프로젝트가 Web Station 정적 방식을 사용할 수 없는 이유
+## 핵심 원칙
 
 ```
-pricelist : Vite 정적 SPA → dist/ 업로드 → Web Station 서빙 ✅ 가능
-damha     : Next.js 16 + API Routes (5개) + ISR + sharp 이미지 처리
-            → 서버 런타임(Node.js) 필수 → 정적 파일 방식 불가 ❌
+DNS를 건드리지 않는 한 기존 Vercel 배포는 절대 영향받지 않는다.
+최종 전환은 DNS 변경 5분으로 끝난다.
 ```
-
-**API Routes 목록** (모두 서버 런타임 필요):
-- `GET /api/news` — Redis 조회 + ISR 60초 캐시
-- `GET/POST/PUT/DELETE /api/admin/news` — 뉴스 CRUD
-- `POST /api/admin/upload` — 이미지 업로드 + sharp 최적화
-- `POST /api/admin/seed` — Redis 시딩
-- `POST /api/web-contact` — 카카오워크 웹훅 전송
-
-→ **Docker(Container Manager) + 리버스 프록시 구성이 유일한 방법**
 
 ---
 
-## 2. 아키텍처 설계
+## 전체 흐름
 
-### 최종 구성도
+```
+[Phase 1]  nas-deploy 브랜치 생성 + 코드 수정
+               ↓
+[Phase 2]  NAS 원타임 환경 설정
+               ↓
+[Phase 3]  NAS 초기 배포 → 내부 검증 (http://192.168.0.252:3000)
+               ↓
+[Phase 4]  nas.damha.kr 서브도메인 추가 → SSL + 리버스 프록시
+           → 외부 검증 (https://nas.damha.kr)
+           ※ 이 시점까지 www.damha.kr = Vercel 그대로
+               ↓
+[Phase 5]  전체 기능 완전 검증 통과
+               ↓
+[Phase 6]  nas-deploy → main 머지 + www.damha.kr DNS 전환 (5분)
+               ↓
+[Phase 7]  안정 운영 1~2주 → Vercel 아카이브 + nas.damha.kr 레코드 삭제
+```
+
+---
+
+## 브랜치 전략
+
+| 브랜치 | 용도 | 배포 대상 |
+|--------|------|----------|
+| `main` | 기존 프로덕션 코드 — **손대지 않음** | Vercel → www.damha.kr |
+| `nas-deploy` | NAS 전용 코드 변경 포함 | NAS → nas.damha.kr (검증용) |
+
+**검증 완료 후**: `nas-deploy` → `main` 머지 1회 → DNS 전환
+
+---
+
+## 아키텍처 (최종 전환 완료 후)
 
 ```
 외부 사용자
@@ -58,7 +61,7 @@ damha     : Next.js 16 + API Routes (5개) + ISR + sharp 이미지 처리
 DSM nginx (시놀로지 내장)
     ├─ Host: www.damha.kr  → [리버스 프록시] → localhost:3000
     ├─ Host: damha.kr      → [리버스 프록시] → localhost:3000
-    └─ 기타 요청           → [Web Station] → /volume1/web/ (pricelist 등 기존 유지)
+    └─ 기타 요청           → [Web Station] → pricelist 등 기존 유지
     │
     ▼
 Docker 컨테이너 (damha-web, 포트 3000)
@@ -66,55 +69,59 @@ Docker 컨테이너 (damha-web, 포트 3000)
     ├─ 환경변수: /volume1/docker/damha/.env.local
     └─ 이미지 볼륨: /volume1/docker/damha/uploads/ ←→ /app/public/uploads/
     │
-    ├── Upstash Redis (외부, 기존 유지 — 변경 없음)
+    ├── Upstash Redis (외부 서비스 — 변경 없음)
     └── 뉴스 이미지: NAS 로컬 파일시스템 (Vercel Blob 대체)
 ```
 
-### 이전 502 재발 방지 전략
+---
 
-1. **컨테이너 먼저, 리버스 프록시 나중**: 컨테이너가 실제로 `curl localhost:3000` 응답할 때까지 리버스 프록시 규칙 추가 안 함
-2. **`--restart always`**: NAS 재시작 시 자동으로 컨테이너 재실행
-3. **헬스체크 포함**: Dockerfile에 HEALTHCHECK 추가 → 컨테이너 비정상 시 자동 재시작
-4. **포트 분리**: 기존 pricelist(Web Station 80/443), damha(Docker 3000) — 포트 충돌 없음
+## 이전 502 재발 방지 설계
+
+기존 pricelist Docker 실패 원인: 리버스 프록시가 죽은 컨테이너 포트(8080)를 가리킴.
+
+**이번 대응책:**
+1. **컨테이너 먼저, 프록시 나중** — `curl localhost:3000` 200 응답 확인 후에만 리버스 프록시 설정
+2. **`--restart always`** — NAS 재시작 시 컨테이너 자동 복구
+3. **Dockerfile HEALTHCHECK** — 앱 비정상 시 컨테이너 자동 재시작
+4. **포트 분리** — 기존 Web Station(80/443), damha(Docker 3000) — 충돌 없음
 
 ---
 
-## 3. 코드 변경 사항 (프로젝트 수정)
+## Phase 1 — nas-deploy 브랜치 생성 + 코드 수정
 
-> **3개 파일 수정 + 3개 신규 파일 추가**
+### 변경 대상 파일 (3개 수정 + 3개 신규)
 
-### 3-1. `next.config.ts` — standalone 출력 모드 추가 (1줄)
+**왜 NAS 빌드인가:**
+Mac은 ARM64(Apple Silicon), NAS는 AMD64(AMD Ryzen). Mac에서 빌드하면 `sharp` 바이너리 아키텍처 불일치 → NAS에서 실행 불가. NAS에서 직접 `docker build`해야 올바른 AMD64 바이너리가 설치됨.
 
-Docker 배포에 최적화된 Next.js standalone 모드. 최소 파일셋으로 실행 가능.
+---
+
+### 1-1. `next.config.ts` — standalone 출력 추가 (1줄)
 
 ```ts
-// 변경 전
 const nextConfig: NextConfig = {
+  output: 'standalone',   // ← 추가
   images: { ... },
-  ...
-};
-
-// 변경 후
-const nextConfig: NextConfig = {
-  output: 'standalone',   // ← 이 줄 추가
-  images: { ... },
-  ...
+  compiler: { ... },
+  experimental: { ... },
+  reactStrictMode: true,
+  poweredByHeader: false,
 };
 ```
 
 ---
 
-### 3-2. `src/app/api/admin/upload/route.ts` — @vercel/blob → 파일시스템
+### 1-2. `src/app/api/admin/upload/route.ts` — @vercel/blob → 파일시스템
 
 ```ts
-// 제거할 줄:
+// 제거:
 import { put } from "@vercel/blob";
 
-// 추가할 줄:
+// 추가:
 import fs from "fs/promises";
 import path from "path";
 
-// 변경 전 (57~60번 줄):
+// 변경 전 (57~60줄):
 const blob = await put(`news/${filename}`, optimized, {
   access: "public",
   contentType: "image/webp",
@@ -130,7 +137,7 @@ return NextResponse.json({ path: `/uploads/news/${filename}`, ... });
 
 ---
 
-### 3-3. `package.json` — @vercel/blob 제거
+### 1-3. `package.json` — @vercel/blob 제거
 
 ```bash
 npm uninstall @vercel/blob
@@ -138,14 +145,10 @@ npm uninstall @vercel/blob
 
 ---
 
-### 3-4. 신규: `Dockerfile` (프로젝트 루트)
-
-> **핵심 결정**: NAS에서 직접 Docker 이미지 빌드.
-> 이유: Mac(ARM64)에서 빌드 시 `sharp` 바이너리가 linux/amd64(NAS)와 호환 안 됨.
-> DS1821+ AMD Ryzen V1500B는 빌드 성능 충분 (예상 빌드 시간: 약 4~7분).
+### 1-4. 신규: `Dockerfile`
 
 ```dockerfile
-# ─── Stage 1: 의존성 설치 ───────────────────────────────
+# ─── Stage 1: 의존성 ────────────────────────────────────
 FROM node:20-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
@@ -157,10 +160,9 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# 빌드 시 환경변수 불필요 (런타임에만 사용됨)
 RUN npm run build
 
-# ─── Stage 3: 실행 이미지 (최소 크기) ────────────────────
+# ─── Stage 3: 실행 이미지 ────────────────────────────────
 FROM node:20-alpine AS runner
 WORKDIR /app
 
@@ -168,23 +170,18 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
-# 비루트 사용자 생성 (보안)
 RUN addgroup --system --gid 1001 nodejs \
  && adduser --system --uid 1001 nextjs
 
-# standalone 빌드 결과물 복사
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# 업로드 디렉토리 생성 (볼륨 마운트 포인트)
 RUN mkdir -p /app/public/uploads/news \
  && chown -R nextjs:nodejs /app/public/uploads
 
-# 헬스체크 (비정상 감지 시 자동 재시작)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-  CMD wget -qO- http://localhost:3000/api/health 2>/dev/null || \
-      wget -qO- http://localhost:3000 > /dev/null 2>&1
+  CMD wget -qO- http://localhost:3000 > /dev/null 2>&1
 
 USER nextjs
 EXPOSE 3000
@@ -193,7 +190,7 @@ CMD ["node", "server.js"]
 
 ---
 
-### 3-5. 신규: `.dockerignore` (프로젝트 루트)
+### 1-5. 신규: `.dockerignore`
 
 ```
 node_modules
@@ -210,74 +207,72 @@ Dockerfile
 
 ---
 
-### 3-6. 신규: `deploy-nas.sh` (프로젝트 루트 — 개발 맥에서 실행)
-
-개발 Mac에서 SSH로 NAS에 명령을 전달해 재배포를 트리거하는 스크립트.
+### 1-6. 신규: `deploy-nas.sh` (개발 Mac에서 실행)
 
 ```bash
 #!/bin/bash
-# 담하 웹사이트 NAS 배포 스크립트 (Mac에서 실행)
 # 사용법: ./deploy-nas.sh
 set -e
 
 NAS_USER="coolk"
 NAS_HOST="192.168.0.252"
-DEPLOY_SCRIPT="/volume1/docker/damha/deploy.sh"
 
-echo "▶ NAS 배포 시작..."
-ssh "${NAS_USER}@${NAS_HOST}" "bash ${DEPLOY_SCRIPT}"
-echo "✓ 배포 완료"
+echo "▶ NAS 재배포 시작..."
+ssh "${NAS_USER}@${NAS_HOST}" "bash /volume1/docker/damha/deploy.sh"
+echo "✓ 완료"
 ```
 
 ---
 
-## 4. NAS 원타임 초기 설정
-
-> SSH 접속: `ssh coolk@192.168.0.252`
-> 아래 작업은 최초 1회만 수행. 이후 재배포 시 불필요.
-
-### Phase 1 — Container Manager 확인 (5분)
+### 1-7. 브랜치 작업 명령
 
 ```bash
-# SSH 접속 후
-docker --version
-# Docker version 20.x 이상이면 OK
-# 없으면: DSM → 패키지 센터 → "Container Manager" 설치 후 재시도
+# 개발 Mac에서:
+git checkout -b nas-deploy
+# (코드 수정 작업)
+git add -p    # 변경사항 확인 후 스테이징
+git commit -m "feat: NAS Docker 배포 설정 (standalone, 파일시스템 업로드, Dockerfile)"
+git push origin nas-deploy
 ```
 
 ---
 
-### Phase 2 — 디렉토리 구조 생성 (2분)
+## Phase 2 — NAS 원타임 환경 설정
+
+> SSH 접속: `ssh coolk@192.168.0.252`
+> 최초 1회만 수행.
+
+### 2-1. Container Manager(Docker) 확인
+
+```bash
+docker --version
+# 없으면: DSM → 패키지 센터 → "Container Manager" 설치
+```
+
+### 2-2. 디렉토리 구조 생성
 
 ```bash
 sudo mkdir -p /volume1/docker/damha/uploads/news
 sudo chown -R coolk:users /volume1/docker/damha
-chmod 755 /volume1/docker/damha
 ```
 
-최종 디렉토리 구조:
+최종 구조:
 ```
 /volume1/docker/damha/
-├── repo/           ← git clone 위치 (코드)
-├── uploads/        ← 뉴스 이미지 영구 저장 (배포해도 삭제 안 됨)
+├── repo/         ← git clone (nas-deploy 브랜치)
+├── uploads/      ← 뉴스 이미지 (배포해도 유지됨)
 │   └── news/
-├── .env.local      ← 환경변수 (절대 git에 포함 금지)
-└── deploy.sh       ← NAS 측 재배포 스크립트
+├── .env.local    ← 환경변수 (git 외부 관리)
+└── deploy.sh     ← NAS 측 재배포 스크립트
 ```
 
----
-
-### Phase 3 — GitHub 접근 설정 (10분)
-
-NAS에서 Private GitHub 레포를 클론하기 위한 SSH Deploy Key 설정.
+### 2-3. GitHub Deploy Key 설정
 
 ```bash
 # NAS에서 SSH 키 생성
 ssh-keygen -t ed25519 -C "damha-nas-deploy" -f ~/.ssh/damha_deploy -N ""
-cat ~/.ssh/damha_deploy.pub
-# 출력된 공개키를 복사
+cat ~/.ssh/damha_deploy.pub   # 공개키 복사
 
-# SSH 설정 추가
 cat >> ~/.ssh/config << 'EOF'
 Host github.com
   IdentityFile ~/.ssh/damha_deploy
@@ -286,48 +281,39 @@ EOF
 ```
 
 **GitHub 설정 (사용자 직접):**
-1. `github.com/damha-web/website` → Settings → Deploy keys → Add deploy key
-2. 위에서 복사한 공개키 붙여넣기 (Title: "Synology DS1821+", Read-only: ✓)
-3. Add key 클릭
+`github.com/damha-web/website` → Settings → Deploy keys → Add deploy key
+→ 공개키 붙여넣기 (Read-only 체크)
 
 ```bash
 # 연결 확인
 ssh -T git@github.com
-# "Hi damha-web! You've successfully authenticated..." 메시지 확인
 ```
 
----
-
-### Phase 4 — 코드 클론 (5분)
+### 2-4. nas-deploy 브랜치 클론
 
 ```bash
 cd /volume1/docker/damha
-git clone git@github.com:damha-web/website.git repo
-ls repo/   # 파일 목록 확인
+git clone -b nas-deploy git@github.com:damha-web/website.git repo
 ```
 
----
+### 2-5. 환경변수 파일 생성
 
-### Phase 5 — 환경변수 파일 생성 (5분)
-
-현재 Vercel 환경변수를 NAS로 이전. `BLOB_READ_WRITE_TOKEN`은 삭제.
+현재 Vercel 환경변수 → NAS 이전. `BLOB_READ_WRITE_TOKEN` 제외.
 
 ```bash
 cat > /volume1/docker/damha/.env.local << 'ENVEOF'
-KV_REST_API_URL=여기에_실제값_입력
-KV_REST_API_TOKEN=여기에_실제값_입력
-ADMIN_PASSWORD=여기에_실제값_입력
-KAKAOWORK_WEBHOOK_URL=여기에_실제값_입력
+KV_REST_API_URL=실제값입력
+KV_REST_API_TOKEN=실제값입력
+ADMIN_PASSWORD=실제값입력
+KAKAOWORK_WEBHOOK_URL=실제값입력
 ENVEOF
 
 chmod 600 /volume1/docker/damha/.env.local
 ```
 
-> 실제 값은 현재 Vercel 대시보드 → Settings → Environment Variables에서 확인.
+> 값은 Vercel 대시보드 → Settings → Environment Variables에서 확인.
 
----
-
-### Phase 6 — NAS 측 배포 스크립트 작성 (3분)
+### 2-6. NAS 측 deploy.sh 생성
 
 ```bash
 cat > /volume1/docker/damha/deploy.sh << 'DEPLOYEOF'
@@ -339,14 +325,14 @@ REPO_DIR="$APP_DIR/repo"
 IMAGE="damha-web:latest"
 CONTAINER="damha-web"
 
-echo "[1/4] 코드 업데이트..."
+echo "[1/4] 코드 업데이트 (nas-deploy 브랜치)..."
 cd "$REPO_DIR"
-git pull origin main
+git pull origin nas-deploy
 
-echo "[2/4] Docker 이미지 빌드 중... (약 4~7분 소요)"
+echo "[2/4] Docker 이미지 빌드 중... (약 5~8분)"
 docker build -t "$IMAGE" .
 
-echo "[3/4] 기존 컨테이너 교체..."
+echo "[3/4] 컨테이너 교체..."
 docker stop "$CONTAINER" 2>/dev/null && docker rm "$CONTAINER" 2>/dev/null || true
 
 docker run -d \
@@ -357,22 +343,19 @@ docker run -d \
   -v "$APP_DIR/uploads:/app/public/uploads" \
   "$IMAGE"
 
-echo "[4/4] 상태 확인..."
-sleep 5
-docker ps | grep "$CONTAINER"
-curl -sf http://localhost:3000 > /dev/null && echo "✓ 서버 응답 정상" || echo "⚠ 서버 응답 없음 — docker logs damha-web 확인"
+echo "[4/4] 응답 확인..."
+sleep 8
+curl -sf http://localhost:3000 > /dev/null \
+  && echo "✓ 서버 정상 응답" \
+  || echo "⚠ 응답 없음 — docker logs $CONTAINER 확인 필요"
 
-echo "배포 완료"
+docker ps | grep "$CONTAINER"
 DEPLOYEOF
 
 chmod +x /volume1/docker/damha/deploy.sh
 ```
 
----
-
-### Phase 7 — node:20-alpine 이미지 사전 다운로드 (5분)
-
-빌드 시 자동으로 받지만, 미리 받아두면 첫 빌드가 빠름.
+### 2-7. node:20-alpine 이미지 사전 다운로드
 
 ```bash
 docker pull node:20-alpine
@@ -380,284 +363,298 @@ docker pull node:20-alpine
 
 ---
 
-## 5. 초기 배포 (최초 1회)
+## Phase 3 — NAS 초기 배포 + 내부 검증
 
 ```bash
 # NAS SSH에서:
 bash /volume1/docker/damha/deploy.sh
-
-# 완료 후 확인:
-docker ps                          # STATUS: Up X seconds (healthy)
-docker logs damha-web --tail 30   # 오류 없는지 확인
-curl -I http://localhost:3000      # HTTP/1.1 200 OK 확인
 ```
 
-> **리버스 프록시는 이 단계 완료 후에만 설정.** 컨테이너가 정상 응답하기 전에 설정하면 이전과 같은 502 발생.
+**내부 검증 (사무실 내 브라우저):**
+
+```
+http://192.168.0.252:3000          ← 홈 페이지
+http://192.168.0.252:3000/about
+http://192.168.0.252:3000/web
+http://192.168.0.252:3000/admin/news
+```
+
+```bash
+# 컨테이너 상태 확인
+docker ps
+docker logs damha-web --tail 30
+curl -I http://localhost:3000      # HTTP/1.1 200 OK
+```
+
+> **중요**: 이 단계에서 리버스 프록시 설정 금지. 컨테이너 정상 확인 후 다음 Phase 진행.
 
 ---
 
-## 6. DSM GUI 설정 (사용자 직접 — 약 15분)
+## Phase 4 — nas.damha.kr 서브도메인으로 외부 검증
 
-> SSH로 처리할 수 없는 DSM 전용 GUI 작업.
+### 4-1. NAS 공인 IP 확인
 
-### 6-1. SSL 인증서 발급
+```bash
+# NAS SSH에서:
+curl -s https://ifconfig.me
+```
 
-1. DSM → **제어판** → **보안** → **인증서** 탭
-2. **추가** 클릭 → **Let's Encrypt에서 인증서 발급** 선택
-3. 도메인 이름: `www.damha.kr`
-4. 주체 대체 이름(SAN): `damha.kr` (선택, 같이 발급 권장)
-5. **확인** 클릭 → 자동 발급 (약 1분)
-6. 발급 후 **구성** 클릭 → `www.damha.kr` 인증서를 **기본**으로 설정
+> **유동 IP인 경우**: Synology DDNS 설정 후 `xxx.synology.me`로 우선 진행.
+> **고정 IP인 경우**: 바로 A 레코드 추가.
 
-> Let's Encrypt 인증서는 90일 유효, DSM이 자동 갱신.
-> 단, NAS가 80번 포트로 외부에서 접근 가능해야 발급 됨 (포트포워딩 확인 필요).
+### 4-2. 카페24 DNS — nas.damha.kr 서브도메인 추가
+
+| 레코드 | 호스트 | 값 | 비고 |
+|--------|--------|-----|------|
+| A | `nas` | NAS 공인 IP | 신규 추가 |
+| A | `www` | 76.76.21.21 (Vercel) | **변경 없음** |
+
+> `www.damha.kr`은 이 단계에서 절대 변경하지 않음.
+
+### 4-3. DSM GUI — SSL 인증서 발급 (사용자 직접)
+
+1. DSM → **제어판** → **보안** → **인증서** → **추가**
+2. Let's Encrypt → 도메인: `nas.damha.kr`
+3. 발급 후 해당 인증서를 `nas.damha.kr`에 적용
+
+### 4-4. DSM GUI — 리버스 프록시 설정 (사용자 직접)
+
+> **컨테이너가 정상 동작 중일 때만 설정 (Phase 3 완료 후).**
+
+DSM → 제어판 → 로그인 포털 → 고급 → 리버스 프록시 → 생성
+
+| 항목 | 값 |
+|------|----|
+| 소스 프로토콜 | HTTPS |
+| 소스 호스트명 | `nas.damha.kr` |
+| 소스 포트 | 443 |
+| 대상 프로토콜 | HTTP |
+| 대상 호스트명 | `localhost` |
+| 대상 포트 | **3000** |
+
+### 4-5. 외부 검증
+
+```bash
+# DNS 전파 확인 (10분~1시간):
+dig nas.damha.kr +short     # NAS 공인 IP 반환되면 완료
+
+# 사이트 확인:
+curl -I https://nas.damha.kr
+```
+
+**브라우저 검증 체크리스트:**
+
+```
+https://nas.damha.kr              ← 홈, 애니메이션, 클라이언트 클라우드
+https://nas.damha.kr/about
+https://nas.damha.kr/services
+https://nas.damha.kr/portfolio
+https://nas.damha.kr/web          ← 웹제작부 페이지 전체
+https://nas.damha.kr/admin/news   ← 어드민 로그인
+```
+
+**기능 검증 체크리스트:**
+
+- [ ] 뉴스 슬라이더 로딩 (Redis 연결)
+- [ ] 어드민 로그인 (`ADMIN_PASSWORD` 환경변수)
+- [ ] 뉴스 생성 + 이미지 업로드 → `/uploads/news/` 저장 확인
+- [ ] 카카오워크 웹훅 수신 확인 (`/web` 문의 폼 제출)
+- [ ] 모바일 반응형 확인
+- [ ] 이미지 최적화 (`next/image`) 작동 확인
 
 ---
 
-### 6-2. 리버스 프록시 설정
+## Phase 5 — 검증 통과 기준
 
-> **반드시 5번(초기 배포)이 완료된 후 진행.**
+아래 항목이 모두 통과되어야 Phase 6 진행 가능:
 
-1. DSM → **제어판** → **로그인 포털** → **고급** 탭 → **리버스 프록시**
-2. **생성** 클릭 후 아래 값 입력:
+| 항목 | 기준 |
+|------|------|
+| 전체 페이지 렌더링 | 6개 주요 페이지 정상 |
+| API 응답 | 뉴스 API, 어드민 CRUD 정상 |
+| 이미지 업로드 | NAS 파일시스템에 저장 확인 |
+| 카카오워크 알림 | 실제 수신 확인 |
+| 모바일 반응형 | iOS Safari, Android Chrome |
+| 성능 | Lighthouse 점수 기존 대비 유사 |
+| 재배포 테스트 | `./deploy-nas.sh` 1회 실행 후 정상 |
+
+---
+
+## Phase 6 — 프로덕션 전환 (검증 완료 후)
+
+### 6-1. nas-deploy → main 머지
+
+```bash
+# 개발 Mac에서:
+git checkout main
+git merge nas-deploy
+git push origin main
+```
+
+### 6-2. www.damha.kr / damha.kr 리버스 프록시 규칙 추가
+
+DSM → 리버스 프록시 → 생성 (2개 추가)
 
 **규칙 1 — www.damha.kr**
 
 | 항목 | 값 |
 |------|----|
-| 설명 | damha 메인사이트 |
 | 소스 프로토콜 | HTTPS |
 | 소스 호스트명 | `www.damha.kr` |
 | 소스 포트 | 443 |
-| HSTS 활성화 | 체크 |
-| 대상 프로토콜 | HTTP |
-| 대상 호스트명 | `localhost` |
 | 대상 포트 | **3000** |
 
 **규칙 2 — damha.kr (apex)**
 
-| 항목 | 값 |
-|------|----|
-| 소스 프로토콜 | HTTPS |
 | 소스 호스트명 | `damha.kr` |
-| 소스 포트 | 443 |
-| 대상 프로토콜 | HTTP |
-| 대상 호스트명 | `localhost` |
+|---|---|
 | 대상 포트 | **3000** |
 
-3. 저장 후 — **NAS 내부에서 먼저 테스트 금지** (DNS가 아직 Vercel을 가리킴)
+### 6-3. SSL 인증서 — www.damha.kr 발급
 
----
+DSM → 인증서 → 추가 → Let's Encrypt → `www.damha.kr`, `damha.kr`
 
-## 7. 도메인 DNS 전환
+### 6-4. DNS 전환 (카페24)
 
-> **이 단계는 NAS 설정이 완전히 완료되고 검증된 후 수행.**
-> 현재 www.damha.kr은 Vercel(76.76.21.21)을 가리키는 상태.
+NAS 공인 IP 재확인 후 변경:
 
-### 사전 확인 (전환 전)
-
-```bash
-# NAS 공인 IP 확인 (NAS SSH에서):
-curl -s https://ifconfig.me
-# 또는 공유기 관리 페이지에서 WAN IP 확인
-```
-
-> **공인 IP가 유동이면**: Synology DDNS 또는 별도 DDNS 서비스 설정 후 CNAME으로 연결.
-> **공인 IP가 고정이면**: A 레코드로 직접 연결.
-
-### DNS 변경 (카페24 도메인 관리)
-
-| 레코드 | 현재 값 | 변경 값 |
-|--------|--------|--------|
+| 레코드 | 현재 | 변경 |
+|--------|------|------|
 | `damha.kr` A | `76.76.21.21` (Vercel) | NAS 공인 IP |
-| `www.damha.kr` A 또는 CNAME | Vercel 값 | NAS 공인 IP |
-| `damha.co.kr` .htaccess | → www.damha.kr (현행 유지) | 변경 없음 |
+| `www.damha.kr` A | Vercel 값 | NAS 공인 IP |
 
-### 전환 후 검증
+### 6-5. 전환 후 즉시 확인
 
 ```bash
-# DNS 전파 확인 (약 10분~1시간 소요):
-dig www.damha.kr +short         # NAS 공인 IP가 반환되면 전파 완료
+# DNS 전파 확인:
+dig www.damha.kr +short
 
-# 사이트 접속 확인:
+# 프로덕션 사이트 확인:
 curl -I https://www.damha.kr    # HTTP/2 200
 ```
 
 ---
 
-## 8. 기존 Vercel Blob 이미지 처리
+## Phase 7 — 마무리
 
-현재 Redis에 저장된 뉴스 9건의 `imageUrl`이 Vercel Blob CDN 주소를 가리킴.
+> 안정 운영 **1~2주** 후 진행.
 
-```
-현재: https://blob.vercel-storage.com/news/1234567890-news-xxx.webp
-전환: /uploads/news/1234567890-news-xxx.webp (NAS 로컬)
-```
-
-**처리 방법 (NAS 전환 완료 후):**
-
-1. **어드민 페이지** `https://www.damha.kr/admin/news` 접속
-2. 각 뉴스의 이미지를 새로 업로드 (9건 × 1분 = 약 10분)
-3. 또는 아래 스크립트로 일괄 마이그레이션:
-
-```bash
-# NAS SSH에서 — Vercel Blob URL을 로컬로 다운로드
-mkdir -p /volume1/docker/damha/uploads/news
-
-# Redis에서 뉴스 데이터 확인 후 imageUrl 목록 추출하여 wget으로 일괄 다운로드
-# (어드민 재업로드가 더 간단하면 그 방법 사용 권장)
-```
+- [ ] Vercel 대시보드 → 프로젝트 → Settings → **Archive Project**
+- [ ] Vercel Blob 파일 정리 (뉴스 이미지 재업로드 완료 후)
+- [ ] `nas.damha.kr` DNS A 레코드 삭제 (카페24)
+- [ ] DSM 리버스 프록시에서 `nas.damha.kr` 규칙 삭제
+- [ ] `nas.damha.kr` SSL 인증서 삭제
 
 ---
 
-## 9. 정기 재배포 절차
-
-코드 수정 후 재배포하는 방법. **개발 Mac에서 실행.**
+## 정기 재배포 절차
 
 ```bash
-# 1. 코드 수정 후 git push
-git push origin main
+# 개발 Mac에서 코드 수정 후:
+git push origin main   # (전환 후에는 main 브랜치)
 
-# 2. NAS 재배포 (약 5~10분 소요)
+# NAS 재배포 (약 5~8분):
 ./deploy-nas.sh
-
-# 또는 직접:
-ssh coolk@192.168.0.252 "bash /volume1/docker/damha/deploy.sh"
 ```
 
-> 재배포 중 약 **30~60초 다운타임** 발생.
-> 업무 시간 외 배포 권장 (트래픽이 적은 새벽 등).
+> 재배포 중 약 **30~60초 다운타임** 발생. 업무 시간 외 권장.
 
 ---
 
-## 10. 운영 관리 명령어
+## 운영 관리 명령어
 
 ```bash
-# SSH 접속
 ssh coolk@192.168.0.252
 
-# 컨테이너 상태 확인
+# 상태 확인
 docker ps
 docker stats damha-web
 
-# 로그 실시간 확인
+# 로그 확인
 docker logs damha-web -f --tail 50
 
-# 앱 재시작 (코드 변경 없이)
+# 재시작 (코드 변경 없이)
 docker restart damha-web
 
-# 업로드 이미지 용량 확인
+# 업로드 용량
 du -sh /volume1/docker/damha/uploads/
 
-# 오래된 Docker 이미지 정리 (디스크 절약)
+# 오래된 이미지 정리
 docker image prune -f
 ```
 
 ---
 
-## 11. 포트포워딩 확인 및 설정
+## 포트포워딩 확인
 
-> pricelist 프로젝트가 이미 외부 접근 가능했다면 포트포워딩이 이미 설정되어 있을 가능성이 높음.
-> 아래에서 확인 후, 없으면 추가.
+pricelist 프로젝트가 이미 외부 접근 가능했다면 이미 설정된 상태. 없으면 추가.
 
-**공유기에서 확인/추가할 규칙:**
+| 외부 포트 | 내부 IP | 내부 포트 |
+|---------|--------|---------|
+| 80 | 192.168.0.252 | 80 |
+| 443 | 192.168.0.252 | 443 |
 
-| 외부 포트 | 내부 IP | 내부 포트 | 프로토콜 |
-|---------|--------|---------|--------|
-| 80 | 192.168.0.252 | 80 | TCP |
-| 443 | 192.168.0.252 | 443 | TCP |
-
-> 포트 3000은 외부에 직접 노출하지 않음 (DSM 리버스 프록시가 443→3000 전달).
-> NAS IP(192.168.0.252)를 공유기에서 DHCP 예약 또는 고정 IP로 설정 권장.
+> NAS IP는 공유기에서 DHCP 예약으로 고정 권장.
 
 ---
 
-## 12. 리스크 및 대응책
+## 리스크 관리
 
-| 리스크 | 가능성 | 대응책 |
-|--------|--------|--------|
-| NAS 정전/재시작 | 중간 | `--restart always` → 자동 복구. UPS 설치 권장 |
-| 인터넷 회선 불안정 | 낮음 | 기업 회선 사용 권장. 모바일 데이터 백업 고려 |
-| 공인 IP 변경 (유동) | 낮음 | Synology DDNS → CNAME 방식으로 해결 |
-| Docker 빌드 실패 | 낮음 | `docker logs` 확인. Vercel은 DNS 변경 전까지 유지 |
-| 이미지 볼륨 데이터 손실 | 매우 낮음 | NAS 내 볼륨(`/volume1/docker/damha/uploads`) → Hyper Backup 포함 |
-| 리버스 프록시 502 재발 | 낮음 | 컨테이너 실행 확인 후 프록시 설정. `--restart always`로 재발 방지 |
-| Let's Encrypt 갱신 실패 | 낮음 | 포트 80 외부 개방 유지. DSM이 자동 갱신 처리 |
+| 리스크 | 대응 |
+|--------|------|
+| NAS 빌드 실패 | `docker logs` 확인. Vercel은 DNS 전까지 안전 |
+| 502 재발 | 컨테이너 실행 확인 후 프록시 설정 순서 준수 |
+| 공인 IP 변경 | Synology DDNS → CNAME 방식 전환 |
+| NAS 정전 | `--restart always` 자동 복구. UPS 권장 |
+| 배포 실패 시 롤백 | DNS를 Vercel IP로 되돌리면 즉시 복구 |
 
 ---
 
-## 13. 전체 작업 체크리스트
+## 전체 체크리스트 요약
 
-### 코드 수정 (개발 Mac)
-
+### Phase 1 — 코드 (개발 Mac)
+- [ ] `git checkout -b nas-deploy`
 - [ ] `next.config.ts` — `output: 'standalone'` 추가
-- [ ] `src/app/api/admin/upload/route.ts` — `@vercel/blob` → 파일시스템 교체
+- [ ] `upload/route.ts` — `@vercel/blob` → 파일시스템 교체
 - [ ] `npm uninstall @vercel/blob`
-- [ ] `Dockerfile` 생성 (프로젝트 루트)
+- [ ] `Dockerfile` 생성
 - [ ] `.dockerignore` 생성
-- [ ] `deploy-nas.sh` 생성
-- [ ] `git push origin main`
+- [ ] `deploy-nas.sh` 생성 + `chmod +x`
+- [ ] `git push origin nas-deploy`
 
-### NAS 원타임 설정 (SSH)
+### Phase 2 — NAS 설정 (SSH)
+- [ ] Container Manager 확인
+- [ ] 디렉토리 생성
+- [ ] GitHub Deploy Key 설정
+- [ ] `git clone -b nas-deploy` 완료
+- [ ] `.env.local` 작성
+- [ ] `deploy.sh` 작성
+- [ ] `docker pull node:20-alpine`
 
-- [ ] Phase 1: Container Manager(Docker) 설치 확인
-- [ ] Phase 2: 디렉토리 구조 생성 (`/volume1/docker/damha/`)
-- [ ] Phase 3: GitHub Deploy Key 생성 및 등록
-- [ ] Phase 4: `git clone` 완료
-- [ ] Phase 5: `.env.local` 작성 (환경변수 이전)
-- [ ] Phase 6: `deploy.sh` 작성
-- [ ] Phase 7: `docker pull node:20-alpine`
+### Phase 3 — 내부 검증
+- [ ] `bash deploy.sh` 실행 성공
+- [ ] `http://192.168.0.252:3000` 접속 확인
 
-### 초기 배포
+### Phase 4 — 외부 검증 (nas.damha.kr)
+- [ ] DNS `nas.damha.kr` A 레코드 추가 (www는 변경 없음)
+- [ ] Let's Encrypt `nas.damha.kr` 발급
+- [ ] 리버스 프록시 `nas.damha.kr → localhost:3000`
+- [ ] `https://nas.damha.kr` 전체 기능 검증
 
-- [ ] `bash /volume1/docker/damha/deploy.sh` 실행
-- [ ] `docker ps` — 컨테이너 실행 중 확인
-- [ ] `curl http://localhost:3000` — 200 응답 확인
+### Phase 5 — 검증 통과
+- [ ] 기능 체크리스트 전체 통과
 
-### DSM GUI (사용자 직접)
+### Phase 6 — 전환
+- [ ] `nas-deploy → main` 머지
+- [ ] `www.damha.kr`, `damha.kr` 리버스 프록시 추가
+- [ ] SSL `www.damha.kr` 발급
+- [ ] DNS A 레코드 변경
 
-- [ ] Let's Encrypt SSL 인증서 발급 (`www.damha.kr`, `damha.kr`)
-- [ ] 리버스 프록시 규칙 2개 추가 (3000번 포트)
-- [ ] 포트포워딩 80/443 확인 및 추가
-
-### DNS 전환 (최종)
-
-- [ ] NAS 공인 IP 확인
-- [ ] 카페24 DNS A 레코드 변경 (`www.damha.kr`, `damha.kr`)
-- [ ] DNS 전파 완료 후 `https://www.damha.kr` 접속 확인
-- [ ] Vercel 프로젝트 아카이브 (즉시 삭제 말고 1~2주 대기 후)
-
-### 마무리
-
-- [ ] 뉴스 이미지 재업로드 (어드민 페이지에서 9건)
-- [ ] `deploy-nas.sh` 실행 권한: `chmod +x deploy-nas.sh`
-- [ ] 전체 페이지 수동 점검 (홈, about, services, portfolio, /web, /admin)
+### Phase 7 — 마무리
+- [ ] 1~2주 안정 운영 확인
+- [ ] Vercel 아카이브
+- [ ] `nas.damha.kr` 레코드 및 프록시 삭제
 
 ---
 
-## 14. 예상 총 작업 시간
-
-| 구분 | 소요 시간 |
-|------|---------|
-| 코드 수정 + git push | 약 1시간 |
-| NAS 원타임 설정 (Phase 1~7) | 약 1시간 |
-| 초기 Docker 빌드 + 배포 | 약 10~15분 |
-| DSM GUI (SSL + 프록시) | 약 20분 |
-| DNS 전환 + 전파 대기 | 약 30분~1시간 |
-| 이미지 재업로드 + 검증 | 약 30분 |
-| **합계** | **약 3.5~4시간** |
-
----
-
-## 15. 전환 후 Vercel 처리
-
-DNS 전환 완료 + 1~2주 안정 운영 확인 후:
-
-1. Vercel 대시보드 → 프로젝트 → Settings → **Archive Project** (즉시 삭제 금지)
-2. Upstash Redis 는 독립 서비스이므로 Vercel 해지 후에도 계속 사용
-3. Vercel Blob 저장된 이미지는 뉴스 재업로드 후 불필요 — Blob 스토리지 파일 정리
-
----
-
-> 승인 후 진행 시, 코드 수정부터 순서대로 진행하겠습니다.
-> NAS SSH 접속은 `coolk@192.168.0.252` (기존 scp 접속과 동일한 계정) 사용.
+> 승인 시 Phase 1(코드 수정)부터 시작합니다.

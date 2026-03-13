@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import sharp from "sharp";
-import { put } from "@vercel/blob";
+import fs from "fs/promises";
+import path from "path";
 import { verifyAdmin, unauthorizedResponse } from "@/lib/admin-auth";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -54,13 +55,12 @@ export async function POST(request: NextRequest) {
     .webp({ quality: WEBP_QUALITY })
     .toBuffer();
 
-  const blob = await put(`news/${filename}`, optimized, {
-    access: "public",
-    contentType: "image/webp",
-  });
+  const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads", "news");
+  await fs.mkdir(UPLOAD_DIR, { recursive: true });
+  await fs.writeFile(path.join(UPLOAD_DIR, filename), optimized);
 
   return NextResponse.json({
-    path: blob.url,
+    path: `/uploads/news/${filename}`,
     filename,
     original: {
       size: originalSize,
