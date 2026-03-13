@@ -665,13 +665,16 @@ pricelist 프로젝트가 이미 외부 접근 가능했다면 이미 설정된 
 1. **EACCES 권한 오류**: 호스트 uploads 디렉토리가 컨테이너 nextjs(uid 1001) 쓰기 불가 → `chmod 777` 적용
 2. **이미지 404**: standalone 모드에서 런타임 추가 파일은 Next.js 정적 서빙 불가 → `[...path]` catch-all API 라우트로 파일 서빙 구현
 
-### Phase 6 — 전환 (진행 예정)
-- [ ] `nas-deploy → main` 머지
-- [ ] DSM 리버스 프록시: `www.damha.kr → localhost:3001`, `damha.kr → localhost:3001` 추가
-- [ ] Let's Encrypt `www.damha.kr` SSL 인증서 발급
-- [ ] 카페24 DNS: `www` A 레코드 → NAS 공인 IP 변경
-- [ ] 카페24 `.htaccess` 리다이렉트 제거 (더 이상 카페24 서버 경유 안 함)
-- [ ] `https://www.damha.kr` 정상 동작 확인
+### Phase 6 — 프로덕션 전환 ✅ 완료 (2026-03-13)
+- [x] `nas-deploy → main` 머지 (fast-forward)
+- [x] NAS repo를 main 브랜치로 전환, deploy.sh도 main 브랜치로 변경
+- [x] DSM 리버스 프록시 3개 설정: `www.damha.kr`, `damha.kr`, `nas.damha.kr` → localhost:3001
+- [x] Let's Encrypt SSL 인증서 발급: `www.damha.kr` + SAN `damha.kr` (만료 2026-06-11)
+- [x] 카페24 DNS 변경: `damha.kr` A → 106.246.205.74, `www` A → 106.246.205.74
+- [x] `https://www.damha.kr` 200 정상 응답 확인
+- [x] `https://damha.kr` 200 정상 응답 확인
+
+**순서 참고**: DNS를 먼저 NAS IP로 변경한 후 SSL 인증서 발급 (Let's Encrypt HTTP 검증이 NAS에 도달해야 하므로)
 
 ### Phase 7 — 마무리
 - [ ] 1~2주 안정 운영 확인
