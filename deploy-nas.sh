@@ -5,8 +5,7 @@ set -e
 
 NAS_USER="coolk"
 NAS_HOST="192.168.0.252"
-DEPLOY_SCRIPT="/volume1/docker/damha/deploy.sh"
 
-echo "▶ NAS 재배포 시작..."
-ssh "${NAS_USER}@${NAS_HOST}" "bash ${DEPLOY_SCRIPT}"
+echo "▶ NAS 재배포 시작 (git pull + docker build)..."
+ssh "${NAS_USER}@${NAS_HOST}" "bash /volume1/docker/damha/deploy.sh"
 echo "✓ 배포 완료"
