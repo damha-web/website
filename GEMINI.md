@@ -28,3 +28,11 @@
 - **PDCA Workflow**: Explicitly run Plan ➔ Do ➔ Check ➔ Act using built-in thought process before writing complex code or bug fixes. document logic in artifacts.
 - **Browser QA**: Use the built-in `browser_subagent` to visually verify UI changes and rendering on the local server after completing frontend tasks.
 - **Knowledge Re-use**: Always review and utilize generated Knowledge Items (KI) via the Knowledge Subagent to avoid redundant analysis.
+
+## 6. Deployment Rules (Critical)
+- **Vercel is DEPRECATED**: This project is NO LONGER deployed automatically via Vercel. Do not wait for or expect Vercel CI/CD.
+- **NAS Deployment Workflow**: 
+  1. Commit and push changes to `main` branch.
+  2. ALWAYS explicitly execute `./deploy-nas.sh` via terminal to trigger the deployment on the target NAS server (DS1821+).
+  3. Wait ~8 minutes for the build to finish.
+- **Media & Storage**: Do not use `@vercel/blob`. Media uploads must go to the local file system (`/volume1/docker/damha/uploads/` mounted to `/app/public/uploads`).
