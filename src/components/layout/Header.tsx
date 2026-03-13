@@ -52,10 +52,20 @@ export default function Header() {
                     {/* Logo */}
                     {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
                     <a href="/" className="flex items-center gap-2 z-[110]">
-                        <img
-                            src="/assets/images/logo_allWhite.svg"
-                            alt="DAMHA"
-                            className={`h-6 md:h-7 w-auto transition-all duration-500 ${isSolid ? "brightness-0 invert-0" : "brightness-0 invert"}`}
+                        <div
+                            className={`h-6 md:h-7 w-[90px] md:w-[105px] transition-colors duration-500 ${
+                                isSolid ? "bg-[#F25D00]" : "bg-white"
+                            }`}
+                            style={{
+                                WebkitMaskImage: "url(/assets/images/logo_allWhite.svg)",
+                                maskImage: "url(/assets/images/logo_allWhite.svg)",
+                                WebkitMaskSize: "contain",
+                                maskSize: "contain",
+                                WebkitMaskRepeat: "no-repeat",
+                                maskRepeat: "no-repeat",
+                                WebkitMaskPosition: "center left",
+                                maskPosition: "center left",
+                            }}
                         />
                     </a>
 

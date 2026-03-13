@@ -36,7 +36,7 @@ function RadarChart() {
     const dataPath = dataPoints.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ") + " Z";
 
     return (
-        <svg viewBox="0 0 300 300" className="w-full max-w-[340px] mx-auto">
+        <svg viewBox="0 0 300 300" className="w-full max-w-[340px] mx-auto overflow-visible">
             {/* Grid */}
             {gridLevels.map((level) => (
                 <polygon

@@ -59,7 +59,7 @@ const SERVICES = [
         icon: <LineChart className="w-14 h-14" />,
         title: "Marketing",
         subtitle: "채널별 통합 퍼포먼스 마케팅",
-        description: "단순한 조회수 늘리기가 아닙니다. 병원의 의료적 전문성을 강조하는 수준 높은 콘텐츠로 실제 내원과 예약 결제를 유도하는 퍼포먼스 마케팅을 전개합니다.",
+        description: "단순한 조회수 늘리기가 아닙니다. 병원의 의료적 전문성을 강조하는 수준 높은 컨텐츠로 실제 내원과 예약 결제를 유도하는 퍼포먼스 마케팅을 전개합니다.",
         details: [
             {
                 title: "검색 기반 바이럴 마케팅",
@@ -81,7 +81,7 @@ const SERVICES = [
         process: [
             "진료권 내 경쟁사 분석",
             "매체별 Media Mix 수립",
-            "고퀄리티 콘텐츠 주기적 발행",
+            "고퀄리티 컨텐츠 주기적 발행",
             "데이터 기반 A/B 테스트 및 성과 최적화"
         ],
         caseStudy: {
@@ -172,7 +172,7 @@ const SERVICES = [
                 icon: <ShieldAlert className="w-6 h-6" />
             },
             {
-                title: "노무 및 법무 리스크 헤지",
+                title: "노무 및 법무 리스크 컨설팅",
                 description: "직원 근로 계약, 노무 리스크 점검 및 진료 간 발생할 수 있는 의료 분쟁 초기 대응 가이드.",
                 icon: <Gavel className="w-6 h-6" />
             },

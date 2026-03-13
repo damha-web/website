@@ -49,7 +49,11 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       sessionStorage.setItem(STORAGE_KEY, password);
       setAuthenticated(true);
     } else {
-      setError("비밀번호가 올바르지 않습니다.");
+      if (res.status === 401) {
+        setError("비밀번호가 올바르지 않습니다.");
+      } else {
+        setError("서버 오류로 로그인할 수 없습니다. 관리자에게 문의하세요.");
+      }
     }
   }, [password]);
 
